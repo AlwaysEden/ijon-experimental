@@ -3,6 +3,7 @@
 #include<assert.h>
 #include<stdbool.h>
 #include <stdlib.h>
+#include "llvm_mode/afl-rt.h"
 
 int main(int argc, char** argv){
   int a = 0;
