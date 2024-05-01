@@ -1,0 +1,6 @@
+bf{"app": {
+  "set": [
+    {
+      "serv": "cofaxCDS",
+      "seass": "oServlet",
+      "init-param": {Šary:

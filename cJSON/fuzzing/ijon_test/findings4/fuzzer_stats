@@ -1,0 +1,27 @@
+start_time        : 1714504925
+last_update       : 1714508521
+fuzzer_pid        : 10779
+cycles_done       : 2699
+execs_done        : 116468730
+execs_per_sec     : 34960.91
+paths_total       : 295
+paths_favored     : 30
+paths_found       : 281
+paths_imported    : 0
+max_depth         : 19
+cur_path          : 269
+pending_favs      : 0
+pending_total     : 0
+variable_paths    : 0
+stability         : 100.00%
+bitmap_cvg        : 1.14%
+unique_crashes    : 0
+unique_hangs      : 0
+last_path         : 1714508054
+last_crash        : 0
+last_hang         : 0
+execs_since_crash : 116468730
+exec_timeout      : 20
+afl_banner        : afl-main
+afl_version       : 2.51b-ijon
+command_line      : /mnt/hdd/fuzz_usability/ijon-experimental/afl-fuzz -i /mnt/hdd/fuzz_usability/ijon-experimental/cJSON/fuzzing/inputs -o findings4 ./afl-main @@

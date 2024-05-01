@@ -171,6 +171,6 @@ cleanup:
 #if __AFL_HAVE_MANUAL_CONTROL
     }
 #endif
-
+//	printf("afl testing done");
     return status;
 }

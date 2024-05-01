@@ -1,0 +1,13 @@
+uu{"et": {
+    "debug": "on",
+    "window": {
+    "title": "SampWidget", "name": "main_window",
+"width": 50},
+    "height": 500
+},
+    "image":  "Images/Sun.png",
+    "name": "sun1",
+        "hOffset": 250,
+        "vOffset": 250,
+        "alignment": "center"
+    },
