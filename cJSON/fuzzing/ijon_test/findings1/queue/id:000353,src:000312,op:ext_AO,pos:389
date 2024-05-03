@@ -1,0 +1,14 @@
+bf{"menu": {
+    "he": "SVG Viewer",
+    "items": [
+        {"id": "Open"},
+        {"id": "OpenNew", "label": "Open New"},
+       false,
+        {"id": "ZoomIn", "label": "Zoom In"},
+        {"id": "ZoomOut", "label": "Zoom Out"},
+        {"id": "Orig", "label": "Oriew"},
+       false,
+        {"id": "Quality"},
+        {"id": "Pause"},
+        {"id": "Mute"},
+       false,false    {"

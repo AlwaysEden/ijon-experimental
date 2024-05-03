@@ -1,0 +1,10 @@
+bf{"app": {
+  "set": [
+    {   "name": "cofaxCDS",
+  "servlet-class": "org.cofax.cds.CDSServlet",
+  "init-param": {
+"configGlossary:installationAt": "Philadelphia, PA", "config lossary:adminEmaiL": "ksm@pobox.com",
+    "configGlossary:poweredBy": "Cofax",
+"configGlossary:poweredByIcon": "/images/Oofax.gif", "con\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\figGlosÅarn:staticPath": "/content/statiery",
+ ",
+        "temp

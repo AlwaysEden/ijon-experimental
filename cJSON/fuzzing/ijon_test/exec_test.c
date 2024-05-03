@@ -13,8 +13,9 @@ int main(){
 	struct stat stat;
 	char path[255];
 	int a = 0;
+	char dirname[255] = "findings"
 	for(int i = 0; i < 5; i++){
-	sprintf(path,"findings%d/queue",i);
+	sprintf(path,"%s%d/queue",dirname, i);
 	DIR *dir = opendir(path);
 
 	int pipefd[2];
@@ -31,7 +32,7 @@ int main(){
 		if(strncmp(".", dirent->d_name, 1) == 0){
 			continue;
 		}
-		sprintf(testcase,"findings%d/queue/%s",i,dirent->d_name);
+		sprintf(testcase,"%s%d/queue/%s",dirname,i,dirent->d_name);
 		#ifdef DEBUG
 			printf("testcase name: %s\n", testcase);
 		#endif

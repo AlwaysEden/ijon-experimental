@@ -63,12 +63,12 @@
    62|       |#ifdef true
    63|       |#undef true
    64|       |#endif
-   65|  44.0k|#define true ((cJSON_bool)1)
+   65|  82.2k|#define true ((cJSON_bool)1)
    66|       |
    67|       |#ifdef false
    68|       |#undef false
    69|       |#endif
-   70|  9.81k|#define false ((cJSON_bool)0)
+   70|  7.01k|#define false ((cJSON_bool)0)
    71|       |
    72|       |/* define isnan and isinf for ANSI C, if in C99 or above, isnan and isinf has been defined in math.h */
    73|       |#ifndef isinf
@@ -240,50 +240,50 @@
   239|       |
   240|       |/* Internal constructor. */
   241|       |static cJSON *cJSON_New_Item(const internal_hooks * const hooks)
-  242|  42.8k|{
-  243|  42.8k|    cJSON* node = (cJSON*)hooks->allocate(sizeof(cJSON));
-  244|  42.8k|    if (node)
-  245|  42.8k|    {
-  246|  42.8k|        memset(node, '\0', sizeof(cJSON));
-  247|  42.8k|    }
+  242|  40.9k|{
+  243|  40.9k|    cJSON* node = (cJSON*)hooks->allocate(sizeof(cJSON));
+  244|  40.9k|    if (node)
+  245|  40.9k|    {
+  246|  40.9k|        memset(node, '\0', sizeof(cJSON));
+  247|  40.9k|    }
   248|       |
-  249|  42.8k|    return node;
-  250|  42.8k|}
+  249|  40.9k|    return node;
+  250|  40.9k|}
   251|       |
   252|       |/* Delete a cJSON structure. */
   253|       |CJSON_PUBLIC(void) cJSON_Delete(cJSON *item)
-  254|  19.3k|{
-  255|  19.3k|    cJSON *next = NULL;
-  256|  62.2k|    while (item != NULL)
-  257|  42.8k|    {
-  258|  42.8k|        next = item->next;
-  259|  42.8k|        if (!(item->type & cJSON_IsReference) && (item->child != NULL))
-  260|  8.28k|        {
-  261|  8.28k|            cJSON_Delete(item->child);
-  262|  8.28k|        }
-  263|  42.8k|        if (!(item->type & cJSON_IsReference) && (item->valuestring != NULL))
-  264|  13.3k|        {
-  265|  13.3k|            global_hooks.deallocate(item->valuestring);
-  266|  13.3k|        }
-  267|  42.8k|        if (!(item->type & cJSON_StringIsConst) && (item->string != NULL))
-  268|  11.0k|        {
-  269|  11.0k|            global_hooks.deallocate(item->string);
-  270|  11.0k|        }
-  271|  42.8k|        global_hooks.deallocate(item);
-  272|  42.8k|        item = next;
-  273|  42.8k|    }
-  274|  19.3k|}
+  254|  15.8k|{
+  255|  15.8k|    cJSON *next = NULL;
+  256|  56.7k|    while (item != NULL)
+  257|  40.9k|    {
+  258|  40.9k|        next = item->next;
+  259|  40.9k|        if (!(item->type & cJSON_IsReference) && (item->child != NULL))
+  260|  8.14k|        {
+  261|  8.14k|            cJSON_Delete(item->child);
+  262|  8.14k|        }
+  263|  40.9k|        if (!(item->type & cJSON_IsReference) && (item->valuestring != NULL))
+  264|  11.0k|        {
+  265|  11.0k|            global_hooks.deallocate(item->valuestring);
+  266|  11.0k|        }
+  267|  40.9k|        if (!(item->type & cJSON_StringIsConst) && (item->string != NULL))
+  268|  16.4k|        {
+  269|  16.4k|            global_hooks.deallocate(item->string);
+  270|  16.4k|        }
+  271|  40.9k|        global_hooks.deallocate(item);
+  272|  40.9k|        item = next;
+  273|  40.9k|    }
+  274|  15.8k|}
   275|       |
   276|       |/* get the decimal point character of the current locale */
   277|       |static unsigned char get_decimal_point(void)
-  278|  8.32k|{
+  278|  15.3k|{
   279|       |#ifdef ENABLE_LOCALES
   280|       |    struct lconv *lconv = localeconv();
   281|       |    return (unsigned char) lconv->decimal_point[0];
   282|       |#else
-  283|  8.32k|    return '.';
-  284|  8.32k|#endif
-  285|  8.32k|}
+  283|  15.3k|    return '.';
+  284|  15.3k|#endif
+  285|  15.3k|}
   286|       |
   287|       |typedef struct
   288|       |{
@@ -295,23 +295,23 @@
   294|       |} parse_buffer;
   295|       |
   296|       |/* check if the given size is left to read in a given parse buffer (starting with 1) */
-  297|   254k|#define can_read(buffer, size) ((buffer != NULL) && (((buffer)->offset + size) <= (buffer)->length))
+  297|   240k|#define can_read(buffer, size) ((buffer != NULL) && (((buffer)->offset + size) <= (buffer)->length))
   298|       |/* check if the buffer can be accessed at the given index (starting with 0) */
-  299|   881k|#define can_access_at_index(buffer, index) ((buffer != NULL) && (((buffer)->offset + index) < (buffer)->length))
-  300|   180k|#define cannot_access_at_index(buffer, index) (!can_access_at_index(buffer, index))
+  299|   988k|#define can_access_at_index(buffer, index) ((buffer != NULL) && (((buffer)->offset + index) < (buffer)->length))
+  300|   198k|#define cannot_access_at_index(buffer, index) (!can_access_at_index(buffer, index))
   301|       |/* get a pointer to the buffer at the position */
-  302|   738k|#define buffer_at_offset(buffer) ((buffer)->content + (buffer)->offset)
+  302|   792k|#define buffer_at_offset(buffer) ((buffer)->content + (buffer)->offset)
   303|       |
   304|       |/* Parse the input text to generate a number, and populate the result into item. */
   305|       |static cJSON_bool parse_number(cJSON * const item, parse_buffer * const input_buffer)
-  306|  8.32k|{
-  307|  8.32k|    double number = 0;
-  308|  8.32k|    unsigned char *after_end = NULL;
-  309|  8.32k|    unsigned char number_c_string[64];
-  310|  8.32k|    unsigned char decimal_point = get_decimal_point();
-  311|  8.32k|    size_t i = 0;
+  306|  10.5k|{
+  307|  10.5k|    double number = 0;
+  308|  10.5k|    unsigned char *after_end = NULL;
+  309|  10.5k|    unsigned char number_c_string[64];
+  310|  10.5k|    unsigned char decimal_point = get_decimal_point();
+  311|  10.5k|    size_t i = 0;
   312|       |
-  313|  8.32k|    if ((input_buffer == NULL) || (input_buffer->content == NULL))
+  313|  10.5k|    if ((input_buffer == NULL) || (input_buffer->content == NULL))
   314|      0|    {
   315|      0|        return false;
   316|      0|    }
@@ -319,65 +319,65 @@
   318|       |    /* copy the number into a temporary buffer and replace '.' with the decimal point
   319|       |     * of the current locale (for strtod)
   320|       |     * This also takes care of '\0' not necessarily being available for marking the end of the input */
-  321|  47.0k|    for (i = 0; (i < (sizeof(number_c_string) - 1)) && can_access_at_index(input_buffer, i); i++)
-  322|  47.0k|    {
-  323|  47.0k|        switch (buffer_at_offset(input_buffer)[i])
-  324|  47.0k|        {
-  325|  6.14k|            case '0':
-  326|  24.8k|            case '1':
-  327|  26.4k|            case '2':
-  328|  26.7k|            case '3':
-  329|  31.0k|            case '4':
-  330|  31.3k|            case '5':
-  331|  31.7k|            case '6':
-  332|  31.9k|            case '7':
-  333|  32.5k|            case '8':
-  334|  33.0k|            case '9':
-  335|  33.0k|            case '+':
-  336|  36.2k|            case '-':
-  337|  37.3k|            case 'e':
-  338|  38.1k|            case 'E':
-  339|  38.1k|                number_c_string[i] = buffer_at_offset(input_buffer)[i];
-  340|  38.1k|                break;
+  321|  44.8k|    for (i = 0; (i < (sizeof(number_c_string) - 1)) && can_access_at_index(input_buffer, i); i++)
+  322|  44.7k|    {
+  323|  44.7k|        switch (buffer_at_offset(input_buffer)[i])
+  324|  44.7k|        {
+  325|  13.4k|            case '0':
+  326|  21.4k|            case '1':
+  327|  24.2k|            case '2':
+  328|  25.5k|            case '3':
+  329|  26.1k|            case '4':
+  330|  26.9k|            case '5':
+  331|  27.8k|            case '6':
+  332|  28.8k|            case '7':
+  333|  29.7k|            case '8':
+  334|  31.2k|            case '9':
+  335|  31.2k|            case '+':
+  336|  32.7k|            case '-':
+  337|  32.8k|            case 'e':
+  338|  33.7k|            case 'E':
+  339|  33.7k|                number_c_string[i] = buffer_at_offset(input_buffer)[i];
+  340|  33.7k|                break;
   341|       |
-  342|    610|            case '.':
-  343|    610|                number_c_string[i] = decimal_point;
-  344|    610|                break;
+  342|    584|            case '.':
+  343|    584|                number_c_string[i] = decimal_point;
+  344|    584|                break;
   345|       |
-  346|  8.29k|            default:
-  347|  8.29k|                goto loop_end;
-  348|  47.0k|        }
-  349|  47.0k|    }
-  350|  8.32k|loop_end:
-  351|  8.32k|    number_c_string[i] = '\0';
+  346|  10.4k|            default:
+  347|  10.4k|                goto loop_end;
+  348|  44.7k|        }
+  349|  44.7k|    }
+  350|  10.5k|loop_end:
+  351|  10.5k|    number_c_string[i] = '\0';
   352|       |
-  353|  8.32k|    number = strtod((const char*)number_c_string, (char**)&after_end);
-  354|  8.32k|    if (number_c_string == after_end)
-  355|     19|    {
-  356|     19|        return false; /* parse_error */
-  357|     19|    }
+  353|  10.5k|    number = strtod((const char*)number_c_string, (char**)&after_end);
+  354|  10.5k|    if (number_c_string == after_end)
+  355|     11|    {
+  356|     11|        return false; /* parse_error */
+  357|     11|    }
   358|       |
-  359|  8.30k|    item->valuedouble = number;
+  359|  10.5k|    item->valuedouble = number;
   360|       |
   361|       |    /* use saturation in case of overflow */
-  362|  8.30k|    if (number >= INT_MAX)
-  363|  1.79k|    {
-  364|  1.79k|        item->valueint = INT_MAX;
-  365|  1.79k|    }
-  366|  6.51k|    else if (number <= (double)INT_MIN)
-  367|    940|    {
-  368|    940|        item->valueint = INT_MIN;
-  369|    940|    }
-  370|  5.57k|    else
-  371|  5.57k|    {
-  372|  5.57k|        item->valueint = (int)number;
-  373|  5.57k|    }
+  362|  10.5k|    if (number >= INT_MAX)
+  363|    940|    {
+  364|    940|        item->valueint = INT_MAX;
+  365|    940|    }
+  366|  9.56k|    else if (number <= (double)INT_MIN)
+  367|    466|    {
+  368|    466|        item->valueint = INT_MIN;
+  369|    466|    }
+  370|  9.09k|    else
+  371|  9.09k|    {
+  372|  9.09k|        item->valueint = (int)number;
+  373|  9.09k|    }
   374|       |
-  375|  8.30k|    item->type = cJSON_Number;
+  375|  10.5k|    item->type = cJSON_Number;
   376|       |
-  377|  8.30k|    input_buffer->offset += (size_t)(after_end - number_c_string);
-  378|  8.30k|    return true;
-  379|  8.32k|}
+  377|  10.5k|    input_buffer->offset += (size_t)(after_end - number_c_string);
+  378|  10.5k|    return true;
+  379|  10.5k|}
   380|       |
   381|       |/* don't ask me, but the original cJSON_SetNumberValue returns an integer or double */
   382|       |CJSON_PUBLIC(double) cJSON_SetNumberHelper(cJSON *object, double number)
@@ -443,39 +443,39 @@
   442|       |
   443|       |/* realloc printbuffer if necessary to have at least "needed" bytes more */
   444|       |static unsigned char* ensure(printbuffer * const p, size_t needed)
-  445|      0|{
-  446|      0|    unsigned char *newbuffer = NULL;
-  447|      0|    size_t newsize = 0;
+  445|  75.5k|{
+  446|  75.5k|    unsigned char *newbuffer = NULL;
+  447|  75.5k|    size_t newsize = 0;
   448|       |
-  449|      0|    if ((p == NULL) || (p->buffer == NULL))
+  449|  75.5k|    if ((p == NULL) || (p->buffer == NULL))
   450|      0|    {
   451|      0|        return NULL;
   452|      0|    }
   453|       |
-  454|      0|    if ((p->length > 0) && (p->offset >= p->length))
+  454|  75.5k|    if ((p->length > 0) && (p->offset >= p->length))
   455|      0|    {
   456|       |        /* make sure that offset is valid */
   457|      0|        return NULL;
   458|      0|    }
   459|       |
-  460|      0|    if (needed > INT_MAX)
+  460|  75.5k|    if (needed > INT_MAX)
   461|      0|    {
   462|       |        /* sizes bigger than INT_MAX are currently not supported */
   463|      0|        return NULL;
   464|      0|    }
   465|       |
-  466|      0|    needed += p->offset + 1;
-  467|      0|    if (needed <= p->length)
-  468|      0|    {
-  469|      0|        return p->buffer + p->offset;
-  470|      0|    }
+  466|  75.5k|    needed += p->offset + 1;
+  467|  75.5k|    if (needed <= p->length)
+  468|  72.0k|    {
+  469|  72.0k|        return p->buffer + p->offset;
+  470|  72.0k|    }
   471|       |
-  472|      0|    if (p->noalloc) {
+  472|  3.50k|    if (p->noalloc) {
   473|      0|        return NULL;
   474|      0|    }
   475|       |
   476|       |    /* calculate new buffer size */
-  477|      0|    if (needed > (INT_MAX / 2))
+  477|  3.50k|    if (needed > (INT_MAX / 2))
   478|      0|    {
   479|       |        /* overflow of int, use INT_MAX if possible */
   480|      0|        if (needed <= INT_MAX)
@@ -487,16 +487,16 @@
   486|      0|            return NULL;
   487|      0|        }
   488|      0|    }
-  489|      0|    else
-  490|      0|    {
-  491|      0|        newsize = needed * 2;
-  492|      0|    }
+  489|  3.50k|    else
+  490|  3.50k|    {
+  491|  3.50k|        newsize = needed * 2;
+  492|  3.50k|    }
   493|       |
-  494|      0|    if (p->hooks.reallocate != NULL)
-  495|      0|    {
+  494|  3.50k|    if (p->hooks.reallocate != NULL)
+  495|  3.50k|    {
   496|       |        /* reallocate with realloc if available */
-  497|      0|        newbuffer = (unsigned char*)p->hooks.reallocate(p->buffer, newsize);
-  498|      0|        if (newbuffer == NULL)
+  497|  3.50k|        newbuffer = (unsigned char*)p->hooks.reallocate(p->buffer, newsize);
+  498|  3.50k|        if (newbuffer == NULL)
   499|      0|        {
   500|      0|            p->hooks.deallocate(p->buffer);
   501|      0|            p->length = 0;
@@ -504,7 +504,7 @@
   503|       |
   504|      0|            return NULL;
   505|      0|        }
-  506|      0|    }
+  506|  3.50k|    }
   507|      0|    else
   508|      0|    {
   509|       |        /* otherwise reallocate manually */
@@ -521,229 +521,229 @@
   520|      0|        memcpy(newbuffer, p->buffer, p->offset + 1);
   521|      0|        p->hooks.deallocate(p->buffer);
   522|      0|    }
-  523|      0|    p->length = newsize;
-  524|      0|    p->buffer = newbuffer;
+  523|  3.50k|    p->length = newsize;
+  524|  3.50k|    p->buffer = newbuffer;
   525|       |
-  526|      0|    return newbuffer + p->offset;
-  527|      0|}
+  526|  3.50k|    return newbuffer + p->offset;
+  527|  3.50k|}
   528|       |
   529|       |/* calculate the new length of the string in a printbuffer and update the offset */
   530|       |static void update_offset(printbuffer * const buffer)
-  531|      0|{
-  532|      0|    const unsigned char *buffer_pointer = NULL;
-  533|      0|    if ((buffer == NULL) || (buffer->buffer == NULL))
+  531|  30.2k|{
+  532|  30.2k|    const unsigned char *buffer_pointer = NULL;
+  533|  30.2k|    if ((buffer == NULL) || (buffer->buffer == NULL))
   534|      0|    {
   535|      0|        return;
   536|      0|    }
-  537|      0|    buffer_pointer = buffer->buffer + buffer->offset;
+  537|  30.2k|    buffer_pointer = buffer->buffer + buffer->offset;
   538|       |
-  539|      0|    buffer->offset += strlen((const char*)buffer_pointer);
-  540|      0|}
+  539|  30.2k|    buffer->offset += strlen((const char*)buffer_pointer);
+  540|  30.2k|}
   541|       |
   542|       |/* securely comparison of floating-point variables */
   543|       |static cJSON_bool compare_double(double a, double b)
-  544|      0|{
-  545|      0|    double maxVal = fabs(a) > fabs(b) ? fabs(a) : fabs(b);
-  546|      0|    return (fabs(a - b) <= maxVal * DBL_EPSILON);
-  547|      0|}
+  544|    518|{
+  545|    518|    double maxVal = fabs(a) > fabs(b) ? fabs(a) : fabs(b);
+  546|    518|    return (fabs(a - b) <= maxVal * DBL_EPSILON);
+  547|    518|}
   548|       |
   549|       |/* Render the number nicely from the given item into a string. */
   550|       |static cJSON_bool print_number(const cJSON * const item, printbuffer * const output_buffer)
-  551|      0|{
-  552|      0|    unsigned char *output_pointer = NULL;
-  553|      0|    double d = item->valuedouble;
-  554|      0|    int length = 0;
-  555|      0|    size_t i = 0;
-  556|      0|    unsigned char number_buffer[26] = {0}; /* temporary buffer to print the number into */
-  557|      0|    unsigned char decimal_point = get_decimal_point();
-  558|      0|    double test = 0.0;
+  551|  4.85k|{
+  552|  4.85k|    unsigned char *output_pointer = NULL;
+  553|  4.85k|    double d = item->valuedouble;
+  554|  4.85k|    int length = 0;
+  555|  4.85k|    size_t i = 0;
+  556|  4.85k|    unsigned char number_buffer[26] = {0}; /* temporary buffer to print the number into */
+  557|  4.85k|    unsigned char decimal_point = get_decimal_point();
+  558|  4.85k|    double test = 0.0;
   559|       |
-  560|      0|    if (output_buffer == NULL)
+  560|  4.85k|    if (output_buffer == NULL)
   561|      0|    {
   562|      0|        return false;
   563|      0|    }
   564|       |
   565|       |    /* This checks for NaN and Infinity */
-  566|      0|    if (isnan(d) || isinf(d))
-  567|      0|    {
-  568|      0|        length = sprintf((char*)number_buffer, "null");
-  569|      0|    }
-  570|      0|	else if(d == (double)item->valueint)
-  571|      0|	{
-  572|      0|		length = sprintf((char*)number_buffer, "%d", item->valueint);
-  573|      0|	}
-  574|      0|    else
-  575|      0|    {
+  566|  4.85k|    if (isnan(d) || isinf(d))
+  567|    499|    {
+  568|    499|        length = sprintf((char*)number_buffer, "null");
+  569|    499|    }
+  570|  4.35k|	else if(d == (double)item->valueint)
+  571|  3.83k|	{
+  572|  3.83k|		length = sprintf((char*)number_buffer, "%d", item->valueint);
+  573|  3.83k|	}
+  574|    518|    else
+  575|    518|    {
   576|       |        /* Try 15 decimal places of precision to avoid nonsignificant nonzero digits */
-  577|      0|        length = sprintf((char*)number_buffer, "%1.15g", d);
+  577|    518|        length = sprintf((char*)number_buffer, "%1.15g", d);
   578|       |
   579|       |        /* Check whether the original double can be recovered */
-  580|      0|        if ((sscanf((char*)number_buffer, "%lg", &test) != 1) || !compare_double((double)test, d))
-  581|      0|        {
+  580|    518|        if ((sscanf((char*)number_buffer, "%lg", &test) != 1) || !compare_double((double)test, d))
+  581|    166|        {
   582|       |            /* If not, print with 17 decimal places of precision */
-  583|      0|            length = sprintf((char*)number_buffer, "%1.17g", d);
-  584|      0|        }
-  585|      0|    }
+  583|    166|            length = sprintf((char*)number_buffer, "%1.17g", d);
+  584|    166|        }
+  585|    518|    }
   586|       |
   587|       |    /* sprintf failed or buffer overrun occurred */
-  588|      0|    if ((length < 0) || (length > (int)(sizeof(number_buffer) - 1)))
+  588|  4.85k|    if ((length < 0) || (length > (int)(sizeof(number_buffer) - 1)))
   589|      0|    {
   590|      0|        return false;
   591|      0|    }
   592|       |
   593|       |    /* reserve appropriate space in the output */
-  594|      0|    output_pointer = ensure(output_buffer, (size_t)length + sizeof(""));
-  595|      0|    if (output_pointer == NULL)
+  594|  4.85k|    output_pointer = ensure(output_buffer, (size_t)length + sizeof(""));
+  595|  4.85k|    if (output_pointer == NULL)
   596|      0|    {
   597|      0|        return false;
   598|      0|    }
   599|       |
   600|       |    /* copy the printed number to the output and replace locale
   601|       |     * dependent decimal point with '.' */
-  602|      0|    for (i = 0; i < ((size_t)length); i++)
-  603|      0|    {
-  604|      0|        if (number_buffer[i] == decimal_point)
-  605|      0|        {
-  606|      0|            output_pointer[i] = '.';
-  607|      0|            continue;
-  608|      0|        }
+  602|  20.8k|    for (i = 0; i < ((size_t)length); i++)
+  603|  15.9k|    {
+  604|  15.9k|        if (number_buffer[i] == decimal_point)
+  605|    312|        {
+  606|    312|            output_pointer[i] = '.';
+  607|    312|            continue;
+  608|    312|        }
   609|       |
-  610|      0|        output_pointer[i] = number_buffer[i];
-  611|      0|    }
-  612|      0|    output_pointer[i] = '\0';
+  610|  15.6k|        output_pointer[i] = number_buffer[i];
+  611|  15.6k|    }
+  612|  4.85k|    output_pointer[i] = '\0';
   613|       |
-  614|      0|    output_buffer->offset += (size_t)length;
+  614|  4.85k|    output_buffer->offset += (size_t)length;
   615|       |
-  616|      0|    return true;
-  617|      0|}
+  616|  4.85k|    return true;
+  617|  4.85k|}
   618|       |
   619|       |/* parse 4 digit hexadecimal number */
   620|       |static unsigned parse_hex4(const unsigned char * const input)
-  621|  16.9k|{
-  622|  16.9k|    unsigned int h = 0;
-  623|  16.9k|    size_t i = 0;
+  621|  10.6k|{
+  622|  10.6k|    unsigned int h = 0;
+  623|  10.6k|    size_t i = 0;
   624|       |
-  625|  61.1k|    for (i = 0; i < 4; i++)
-  626|  53.0k|    {
+  625|  33.4k|    for (i = 0; i < 4; i++)
+  626|  30.8k|    {
   627|       |        /* parse digit */
-  628|  53.0k|        if ((input[i] >= '0') && (input[i] <= '9'))
-  629|  11.5k|        {
-  630|  11.5k|            h += (unsigned int) input[i] - '0';
-  631|  11.5k|        }
-  632|  41.4k|        else if ((input[i] >= 'A') && (input[i] <= 'F'))
-  633|  7.58k|        {
-  634|  7.58k|            h += (unsigned int) 10 + input[i] - 'A';
-  635|  7.58k|        }
-  636|  33.9k|        else if ((input[i] >= 'a') && (input[i] <= 'f'))
-  637|  25.1k|        {
-  638|  25.1k|            h += (unsigned int) 10 + input[i] - 'a';
-  639|  25.1k|        }
-  640|  8.79k|        else /* invalid */
-  641|  8.79k|        {
-  642|  8.79k|            return 0;
-  643|  8.79k|        }
+  628|  30.8k|        if ((input[i] >= '0') && (input[i] <= '9'))
+  629|  8.43k|        {
+  630|  8.43k|            h += (unsigned int) input[i] - '0';
+  631|  8.43k|        }
+  632|  22.4k|        else if ((input[i] >= 'A') && (input[i] <= 'F'))
+  633|  9.34k|        {
+  634|  9.34k|            h += (unsigned int) 10 + input[i] - 'A';
+  635|  9.34k|        }
+  636|  13.0k|        else if ((input[i] >= 'a') && (input[i] <= 'f'))
+  637|  5.10k|        {
+  638|  5.10k|            h += (unsigned int) 10 + input[i] - 'a';
+  639|  5.10k|        }
+  640|  7.96k|        else /* invalid */
+  641|  7.96k|        {
+  642|  7.96k|            return 0;
+  643|  7.96k|        }
   644|       |
-  645|  44.2k|        if (i < 3)
-  646|  36.1k|        {
+  645|  22.8k|        if (i < 3)
+  646|  20.2k|        {
   647|       |            /* shift left to make place for the next nibble */
-  648|  36.1k|            h = h << 4;
-  649|  36.1k|        }
-  650|  44.2k|    }
+  648|  20.2k|            h = h << 4;
+  649|  20.2k|        }
+  650|  22.8k|    }
   651|       |
-  652|  8.13k|    return h;
-  653|  16.9k|}
+  652|  2.64k|    return h;
+  653|  10.6k|}
   654|       |
   655|       |/* converts a UTF-16 literal to UTF-8
   656|       | * A literal can be one or two sequences of the form \uXXXX */
   657|       |static unsigned char utf16_literal_to_utf8(const unsigned char * const input_pointer, const unsigned char * const input_end, unsigned char **output_pointer)
-  658|  14.8k|{
-  659|  14.8k|    long unsigned int codepoint = 0;
-  660|  14.8k|    unsigned int first_code = 0;
-  661|  14.8k|    const unsigned char *first_sequence = input_pointer;
-  662|  14.8k|    unsigned char utf8_length = 0;
-  663|  14.8k|    unsigned char utf8_position = 0;
-  664|  14.8k|    unsigned char sequence_length = 0;
-  665|  14.8k|    unsigned char first_byte_mark = 0;
+  658|  10.4k|{
+  659|  10.4k|    long unsigned int codepoint = 0;
+  660|  10.4k|    unsigned int first_code = 0;
+  661|  10.4k|    const unsigned char *first_sequence = input_pointer;
+  662|  10.4k|    unsigned char utf8_length = 0;
+  663|  10.4k|    unsigned char utf8_position = 0;
+  664|  10.4k|    unsigned char sequence_length = 0;
+  665|  10.4k|    unsigned char first_byte_mark = 0;
   666|       |
-  667|  14.8k|    if ((input_end - first_sequence) < 6)
-  668|     32|    {
+  667|  10.4k|    if ((input_end - first_sequence) < 6)
+  668|     21|    {
   669|       |        /* input ends unexpectedly */
-  670|     32|        goto fail;
-  671|     32|    }
+  670|     21|        goto fail;
+  671|     21|    }
   672|       |
   673|       |    /* get the first utf16 sequence */
-  674|  14.8k|    first_code = parse_hex4(first_sequence + 2);
+  674|  10.4k|    first_code = parse_hex4(first_sequence + 2);
   675|       |
   676|       |    /* check that the code is valid */
-  677|  14.8k|    if (((first_code >= 0xDC00) && (first_code <= 0xDFFF)))
-  678|     14|    {
-  679|     14|        goto fail;
-  680|     14|    }
+  677|  10.4k|    if (((first_code >= 0xDC00) && (first_code <= 0xDFFF)))
+  678|      9|    {
+  679|      9|        goto fail;
+  680|      9|    }
   681|       |
   682|       |    /* UTF16 surrogate pair */
-  683|  14.8k|    if ((first_code >= 0xD800) && (first_code <= 0xDBFF))
-  684|  2.14k|    {
-  685|  2.14k|        const unsigned char *second_sequence = first_sequence + 6;
-  686|  2.14k|        unsigned int second_code = 0;
-  687|  2.14k|        sequence_length = 12; /* \uXXXX\uXXXX */
+  683|  10.4k|    if ((first_code >= 0xD800) && (first_code <= 0xDBFF))
+  684|    175|    {
+  685|    175|        const unsigned char *second_sequence = first_sequence + 6;
+  686|    175|        unsigned int second_code = 0;
+  687|    175|        sequence_length = 12; /* \uXXXX\uXXXX */
   688|       |
-  689|  2.14k|        if ((input_end - second_sequence) < 6)
-  690|     22|        {
+  689|    175|        if ((input_end - second_sequence) < 6)
+  690|      7|        {
   691|       |            /* input ends unexpectedly */
-  692|     22|            goto fail;
-  693|     22|        }
+  692|      7|            goto fail;
+  693|      7|        }
   694|       |
-  695|  2.12k|        if ((second_sequence[0] != '\\') || (second_sequence[1] != 'u'))
-  696|     27|        {
+  695|    168|        if ((second_sequence[0] != '\\') || (second_sequence[1] != 'u'))
+  696|     16|        {
   697|       |            /* missing second half of the surrogate pair */
-  698|     27|            goto fail;
-  699|     27|        }
+  698|     16|            goto fail;
+  699|     16|        }
   700|       |
   701|       |        /* get the second utf16 sequence */
-  702|  2.09k|        second_code = parse_hex4(second_sequence + 2);
+  702|    152|        second_code = parse_hex4(second_sequence + 2);
   703|       |        /* check that the code is valid */
-  704|  2.09k|        if ((second_code < 0xDC00) || (second_code > 0xDFFF))
-  705|     45|        {
+  704|    152|        if ((second_code < 0xDC00) || (second_code > 0xDFFF))
+  705|     11|        {
   706|       |            /* invalid second half of the surrogate pair */
-  707|     45|            goto fail;
-  708|     45|        }
+  707|     11|            goto fail;
+  708|     11|        }
   709|       |
   710|       |
   711|       |        /* calculate the unicode codepoint from the surrogate pair */
-  712|  2.05k|        codepoint = 0x10000 + (((first_code & 0x3FF) << 10) | (second_code & 0x3FF));
-  713|  2.05k|    }
-  714|  12.6k|    else
-  715|  12.6k|    {
-  716|  12.6k|        sequence_length = 6; /* \uXXXX */
-  717|  12.6k|        codepoint = first_code;
-  718|  12.6k|    }
+  712|    141|        codepoint = 0x10000 + (((first_code & 0x3FF) << 10) | (second_code & 0x3FF));
+  713|    141|    }
+  714|  10.2k|    else
+  715|  10.2k|    {
+  716|  10.2k|        sequence_length = 6; /* \uXXXX */
+  717|  10.2k|        codepoint = first_code;
+  718|  10.2k|    }
   719|       |
   720|       |    /* encode as UTF-8
   721|       |     * takes at maximum 4 bytes to encode:
   722|       |     * 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx */
-  723|  14.7k|    if (codepoint < 0x80)
-  724|  8.76k|    {
+  723|  10.4k|    if (codepoint < 0x80)
+  724|  7.95k|    {
   725|       |        /* normal ascii, encoding 0xxxxxxx */
-  726|  8.76k|        utf8_length = 1;
-  727|  8.76k|    }
-  728|  5.96k|    else if (codepoint < 0x800)
-  729|  1.65k|    {
+  726|  7.95k|        utf8_length = 1;
+  727|  7.95k|    }
+  728|  2.45k|    else if (codepoint < 0x800)
+  729|    545|    {
   730|       |        /* two bytes, encoding 110xxxxx 10xxxxxx */
-  731|  1.65k|        utf8_length = 2;
-  732|  1.65k|        first_byte_mark = 0xC0; /* 11000000 */
-  733|  1.65k|    }
-  734|  4.30k|    else if (codepoint < 0x10000)
-  735|  2.25k|    {
+  731|    545|        utf8_length = 2;
+  732|    545|        first_byte_mark = 0xC0; /* 11000000 */
+  733|    545|    }
+  734|  1.91k|    else if (codepoint < 0x10000)
+  735|  1.76k|    {
   736|       |        /* three bytes, encoding 1110xxxx 10xxxxxx 10xxxxxx */
-  737|  2.25k|        utf8_length = 3;
-  738|  2.25k|        first_byte_mark = 0xE0; /* 11100000 */
-  739|  2.25k|    }
-  740|  2.05k|    else if (codepoint <= 0x10FFFF)
-  741|  2.05k|    {
+  737|  1.76k|        utf8_length = 3;
+  738|  1.76k|        first_byte_mark = 0xE0; /* 11100000 */
+  739|  1.76k|    }
+  740|    141|    else if (codepoint <= 0x10FFFF)
+  741|    141|    {
   742|       |        /* four bytes, encoding 1110xxxx 10xxxxxx 10xxxxxx 10xxxxxx */
-  743|  2.05k|        utf8_length = 4;
-  744|  2.05k|        first_byte_mark = 0xF0; /* 11110000 */
-  745|  2.05k|    }
+  743|    141|        utf8_length = 4;
+  744|    141|        first_byte_mark = 0xF0; /* 11110000 */
+  745|    141|    }
   746|      0|    else
   747|      0|    {
   748|       |        /* invalid unicode codepoint */
@@ -751,176 +751,176 @@
   750|      0|    }
   751|       |
   752|       |    /* encode as utf8 */
-  753|  27.0k|    for (utf8_position = (unsigned char)(utf8_length - 1); utf8_position > 0; utf8_position--)
-  754|  12.3k|    {
+  753|  14.9k|    for (utf8_position = (unsigned char)(utf8_length - 1); utf8_position > 0; utf8_position--)
+  754|  4.50k|    {
   755|       |        /* 10xxxxxx */
-  756|  12.3k|        (*output_pointer)[utf8_position] = (unsigned char)((codepoint | 0x80) & 0xBF);
-  757|  12.3k|        codepoint >>= 6;
-  758|  12.3k|    }
+  756|  4.50k|        (*output_pointer)[utf8_position] = (unsigned char)((codepoint | 0x80) & 0xBF);
+  757|  4.50k|        codepoint >>= 6;
+  758|  4.50k|    }
   759|       |    /* encode first byte */
-  760|  14.7k|    if (utf8_length > 1)
-  761|  5.96k|    {
-  762|  5.96k|        (*output_pointer)[0] = (unsigned char)((codepoint | first_byte_mark) & 0xFF);
-  763|  5.96k|    }
-  764|  8.76k|    else
-  765|  8.76k|    {
-  766|  8.76k|        (*output_pointer)[0] = (unsigned char)(codepoint & 0x7F);
-  767|  8.76k|    }
+  760|  10.4k|    if (utf8_length > 1)
+  761|  2.45k|    {
+  762|  2.45k|        (*output_pointer)[0] = (unsigned char)((codepoint | first_byte_mark) & 0xFF);
+  763|  2.45k|    }
+  764|  7.95k|    else
+  765|  7.95k|    {
+  766|  7.95k|        (*output_pointer)[0] = (unsigned char)(codepoint & 0x7F);
+  767|  7.95k|    }
   768|       |
-  769|  14.7k|    *output_pointer += utf8_length;
+  769|  10.4k|    *output_pointer += utf8_length;
   770|       |
-  771|  14.7k|    return sequence_length;
+  771|  10.4k|    return sequence_length;
   772|       |
-  773|    140|fail:
-  774|    140|    return 0;
-  775|  14.7k|}
+  773|     64|fail:
+  774|     64|    return 0;
+  775|  10.4k|}
   776|       |
   777|       |/* Parse the input text into an unescaped cinput, and populate item. */
   778|       |static cJSON_bool parse_string(cJSON * const item, parse_buffer * const input_buffer)
-  779|  24.6k|{
-  780|  24.6k|    const unsigned char *input_pointer = buffer_at_offset(input_buffer) + 1;
-  781|  24.6k|    const unsigned char *input_end = buffer_at_offset(input_buffer) + 1;
-  782|  24.6k|    unsigned char *output_pointer = NULL;
-  783|  24.6k|    unsigned char *output = NULL;
+  779|  27.7k|{
+  780|  27.7k|    const unsigned char *input_pointer = buffer_at_offset(input_buffer) + 1;
+  781|  27.7k|    const unsigned char *input_end = buffer_at_offset(input_buffer) + 1;
+  782|  27.7k|    unsigned char *output_pointer = NULL;
+  783|  27.7k|    unsigned char *output = NULL;
   784|       |
   785|       |    /* not a string */
-  786|  24.6k|    if (buffer_at_offset(input_buffer)[0] != '\"')
-  787|     45|    {
-  788|     45|        goto fail;
-  789|     45|    }
+  786|  27.7k|    if (buffer_at_offset(input_buffer)[0] != '\"')
+  787|     82|    {
+  788|     82|        goto fail;
+  789|     82|    }
   790|       |
-  791|  24.6k|    {
+  791|  27.6k|    {
   792|       |        /* calculate approximate size of the output (overestimate) */
-  793|  24.6k|        size_t allocation_length = 0;
-  794|  24.6k|        size_t skipped_bytes = 0;
-  795|   335k|        while (((size_t)(input_end - input_buffer->content) < input_buffer->length) && (*input_end != '\"'))
-  796|   310k|        {
+  793|  27.6k|        size_t allocation_length = 0;
+  794|  27.6k|        size_t skipped_bytes = 0;
+  795|   437k|        while (((size_t)(input_end - input_buffer->content) < input_buffer->length) && (*input_end != '\"'))
+  796|   409k|        {
   797|       |            /* is escape sequence */
-  798|   310k|            if (input_end[0] == '\\')
-  799|  26.4k|            {
-  800|  26.4k|                if ((size_t)(input_end + 1 - input_buffer->content) >= input_buffer->length)
+  798|   409k|            if (input_end[0] == '\\')
+  799|  19.1k|            {
+  800|  19.1k|                if ((size_t)(input_end + 1 - input_buffer->content) >= input_buffer->length)
   801|      0|                {
   802|       |                    /* prevent buffer overflow when last input character is a backslash */
   803|      0|                    goto fail;
   804|      0|                }
-  805|  26.4k|                skipped_bytes++;
-  806|  26.4k|                input_end++;
-  807|  26.4k|            }
-  808|   310k|            input_end++;
-  809|   310k|        }
-  810|  24.6k|        if (((size_t)(input_end - input_buffer->content) >= input_buffer->length) || (*input_end != '\"'))
-  811|     55|        {
-  812|     55|            goto fail; /* string ended unexpectedly */
-  813|     55|        }
+  805|  19.1k|                skipped_bytes++;
+  806|  19.1k|                input_end++;
+  807|  19.1k|            }
+  808|   409k|            input_end++;
+  809|   409k|        }
+  810|  27.6k|        if (((size_t)(input_end - input_buffer->content) >= input_buffer->length) || (*input_end != '\"'))
+  811|     36|        {
+  812|     36|            goto fail; /* string ended unexpectedly */
+  813|     36|        }
   814|       |
   815|       |        /* This is at most how much we need for the output */
-  816|  24.5k|        allocation_length = (size_t) (input_end - buffer_at_offset(input_buffer)) - skipped_bytes;
-  817|  24.5k|        output = (unsigned char*)input_buffer->hooks.allocate(allocation_length + sizeof(""));
-  818|  24.5k|        if (output == NULL)
+  816|  27.5k|        allocation_length = (size_t) (input_end - buffer_at_offset(input_buffer)) - skipped_bytes;
+  817|  27.5k|        output = (unsigned char*)input_buffer->hooks.allocate(allocation_length + sizeof(""));
+  818|  27.5k|        if (output == NULL)
   819|      0|        {
   820|      0|            goto fail; /* allocation failure */
   821|      0|        }
-  822|  24.5k|    }
+  822|  27.5k|    }
   823|       |
-  824|  24.5k|    output_pointer = output;
+  824|  27.5k|    output_pointer = output;
   825|       |    /* loop through the string literal */
-  826|   262k|    while (input_pointer < input_end)
-  827|   238k|    {
-  828|   238k|        if (*input_pointer != '\\')
-  829|   216k|        {
-  830|   216k|            *output_pointer++ = *input_pointer++;
-  831|   216k|        }
+  826|   393k|    while (input_pointer < input_end)
+  827|   366k|    {
+  828|   366k|        if (*input_pointer != '\\')
+  829|   348k|        {
+  830|   348k|            *output_pointer++ = *input_pointer++;
+  831|   348k|        }
   832|       |        /* escape sequence */
-  833|  22.0k|        else
-  834|  22.0k|        {
-  835|  22.0k|            unsigned char sequence_length = 2;
-  836|  22.0k|            if ((input_end - input_pointer) < 1)
+  833|  17.5k|        else
+  834|  17.5k|        {
+  835|  17.5k|            unsigned char sequence_length = 2;
+  836|  17.5k|            if ((input_end - input_pointer) < 1)
   837|      0|            {
   838|      0|                goto fail;
   839|      0|            }
   840|       |
-  841|  22.0k|            switch (input_pointer[1])
-  842|  22.0k|            {
-  843|    618|                case 'b':
-  844|    618|                    *output_pointer++ = '\b';
-  845|    618|                    break;
-  846|    366|                case 'f':
-  847|    366|                    *output_pointer++ = '\f';
-  848|    366|                    break;
-  849|    427|                case 'n':
-  850|    427|                    *output_pointer++ = '\n';
-  851|    427|                    break;
-  852|    451|                case 'r':
-  853|    451|                    *output_pointer++ = '\r';
-  854|    451|                    break;
-  855|    583|                case 't':
-  856|    583|                    *output_pointer++ = '\t';
-  857|    583|                    break;
-  858|  2.17k|                case '\"':
-  859|  4.62k|                case '\\':
-  860|  4.62k|                case '/':
-  861|  4.62k|                    *output_pointer++ = input_pointer[1];
-  862|  4.62k|                    break;
+  841|  17.5k|            switch (input_pointer[1])
+  842|  17.5k|            {
+  843|    276|                case 'b':
+  844|    276|                    *output_pointer++ = '\b';
+  845|    276|                    break;
+  846|    175|                case 'f':
+  847|    175|                    *output_pointer++ = '\f';
+  848|    175|                    break;
+  849|    291|                case 'n':
+  850|    291|                    *output_pointer++ = '\n';
+  851|    291|                    break;
+  852|    236|                case 'r':
+  853|    236|                    *output_pointer++ = '\r';
+  854|    236|                    break;
+  855|    216|                case 't':
+  856|    216|                    *output_pointer++ = '\t';
+  857|    216|                    break;
+  858|  1.99k|                case '\"':
+  859|  5.82k|                case '\\':
+  860|  5.82k|                case '/':
+  861|  5.82k|                    *output_pointer++ = input_pointer[1];
+  862|  5.82k|                    break;
   863|       |
   864|       |                /* UTF-16 literal */
-  865|  14.8k|                case 'u':
-  866|  14.8k|                    sequence_length = utf16_literal_to_utf8(input_pointer, input_end, &output_pointer);
-  867|  14.8k|                    if (sequence_length == 0)
-  868|    140|                    {
+  865|  10.4k|                case 'u':
+  866|  10.4k|                    sequence_length = utf16_literal_to_utf8(input_pointer, input_end, &output_pointer);
+  867|  10.4k|                    if (sequence_length == 0)
+  868|     64|                    {
   869|       |                        /* failed to convert UTF16-literal to UTF-8 */
-  870|    140|                        goto fail;
-  871|    140|                    }
-  872|  14.7k|                    break;
+  870|     64|                        goto fail;
+  871|     64|                    }
+  872|  10.4k|                    break;
   873|       |
-  874|  14.7k|                default:
-  875|     78|                    goto fail;
-  876|  22.0k|            }
-  877|  21.7k|            input_pointer += sequence_length;
-  878|  21.7k|        }
-  879|   238k|    }
+  874|  10.4k|                default:
+  875|     80|                    goto fail;
+  876|  17.5k|            }
+  877|  17.4k|            input_pointer += sequence_length;
+  878|  17.4k|        }
+  879|   366k|    }
   880|       |
   881|       |    /* zero terminate the output */
-  882|  24.3k|    *output_pointer = '\0';
+  882|  27.4k|    *output_pointer = '\0';
   883|       |
-  884|  24.3k|    item->type = cJSON_String;
-  885|  24.3k|    item->valuestring = (char*)output;
+  884|  27.4k|    item->type = cJSON_String;
+  885|  27.4k|    item->valuestring = (char*)output;
   886|       |
-  887|  24.3k|    input_buffer->offset = (size_t) (input_end - input_buffer->content);
-  888|  24.3k|    input_buffer->offset++;
+  887|  27.4k|    input_buffer->offset = (size_t) (input_end - input_buffer->content);
+  888|  27.4k|    input_buffer->offset++;
   889|       |
-  890|  24.3k|    return true;
+  890|  27.4k|    return true;
   891|       |
-  892|    318|fail:
-  893|    318|    if (output != NULL)
-  894|    218|    {
-  895|    218|        input_buffer->hooks.deallocate(output);
-  896|    218|    }
+  892|    262|fail:
+  893|    262|    if (output != NULL)
+  894|    144|    {
+  895|    144|        input_buffer->hooks.deallocate(output);
+  896|    144|    }
   897|       |
-  898|    318|    if (input_pointer != NULL)
-  899|    318|    {
-  900|    318|        input_buffer->offset = (size_t)(input_pointer - input_buffer->content);
-  901|    318|    }
+  898|    262|    if (input_pointer != NULL)
+  899|    262|    {
+  900|    262|        input_buffer->offset = (size_t)(input_pointer - input_buffer->content);
+  901|    262|    }
   902|       |
-  903|    318|    return false;
-  904|  24.5k|}
+  903|    262|    return false;
+  904|  27.5k|}
   905|       |
   906|       |/* Render the cstring provided to an escaped version that can be printed. */
   907|       |static cJSON_bool print_string_ptr(const unsigned char * const input, printbuffer * const output_buffer)
-  908|      0|{
-  909|      0|    const unsigned char *input_pointer = NULL;
-  910|      0|    unsigned char *output = NULL;
-  911|      0|    unsigned char *output_pointer = NULL;
-  912|      0|    size_t output_length = 0;
+  908|  18.3k|{
+  909|  18.3k|    const unsigned char *input_pointer = NULL;
+  910|  18.3k|    unsigned char *output = NULL;
+  911|  18.3k|    unsigned char *output_pointer = NULL;
+  912|  18.3k|    size_t output_length = 0;
   913|       |    /* numbers of additional characters needed for escaping */
-  914|      0|    size_t escape_characters = 0;
+  914|  18.3k|    size_t escape_characters = 0;
   915|       |
-  916|      0|    if (output_buffer == NULL)
+  916|  18.3k|    if (output_buffer == NULL)
   917|      0|    {
   918|      0|        return false;
   919|      0|    }
   920|       |
   921|       |    /* empty string */
-  922|      0|    if (input == NULL)
+  922|  18.3k|    if (input == NULL)
   923|      0|    {
   924|      0|        output = ensure(output_buffer, sizeof("\"\""));
   925|      0|        if (output == NULL)
@@ -933,104 +933,104 @@
   932|      0|    }
   933|       |
   934|       |    /* set "flag" to 1 if something needs to be escaped */
-  935|      0|    for (input_pointer = input; *input_pointer; input_pointer++)
-  936|      0|    {
-  937|      0|        switch (*input_pointer)
-  938|      0|        {
-  939|      0|            case '\"':
-  940|      0|            case '\\':
-  941|      0|            case '\b':
-  942|      0|            case '\f':
-  943|      0|            case '\n':
-  944|      0|            case '\r':
-  945|      0|            case '\t':
+  935|   197k|    for (input_pointer = input; *input_pointer; input_pointer++)
+  936|   179k|    {
+  937|   179k|        switch (*input_pointer)
+  938|   179k|        {
+  939|    804|            case '\"':
+  940|  2.15k|            case '\\':
+  941|  4.43k|            case '\b':
+  942|  7.44k|            case '\f':
+  943|  10.7k|            case '\n':
+  944|  12.5k|            case '\r':
+  945|  14.5k|            case '\t':
   946|       |                /* one character escape sequence */
-  947|      0|                escape_characters++;
-  948|      0|                break;
-  949|      0|            default:
-  950|      0|                if (*input_pointer < 32)
-  951|      0|                {
+  947|  14.5k|                escape_characters++;
+  948|  14.5k|                break;
+  949|   164k|            default:
+  950|   164k|                if (*input_pointer < 32)
+  951|  3.03k|                {
   952|       |                    /* UTF-16 escape sequence uXXXX */
-  953|      0|                    escape_characters += 5;
-  954|      0|                }
-  955|      0|                break;
-  956|      0|        }
-  957|      0|    }
-  958|      0|    output_length = (size_t)(input_pointer - input) + escape_characters;
+  953|  3.03k|                    escape_characters += 5;
+  954|  3.03k|                }
+  955|   164k|                break;
+  956|   179k|        }
+  957|   179k|    }
+  958|  18.3k|    output_length = (size_t)(input_pointer - input) + escape_characters;
   959|       |
-  960|      0|    output = ensure(output_buffer, output_length + sizeof("\"\""));
-  961|      0|    if (output == NULL)
+  960|  18.3k|    output = ensure(output_buffer, output_length + sizeof("\"\""));
+  961|  18.3k|    if (output == NULL)
   962|      0|    {
   963|      0|        return false;
   964|      0|    }
   965|       |
   966|       |    /* no characters have to be escaped */
-  967|      0|    if (escape_characters == 0)
-  968|      0|    {
-  969|      0|        output[0] = '\"';
-  970|      0|        memcpy(output + 1, input, output_length);
-  971|      0|        output[output_length + 1] = '\"';
-  972|      0|        output[output_length + 2] = '\0';
+  967|  18.3k|    if (escape_characters == 0)
+  968|  17.4k|    {
+  969|  17.4k|        output[0] = '\"';
+  970|  17.4k|        memcpy(output + 1, input, output_length);
+  971|  17.4k|        output[output_length + 1] = '\"';
+  972|  17.4k|        output[output_length + 2] = '\0';
   973|       |
-  974|      0|        return true;
-  975|      0|    }
+  974|  17.4k|        return true;
+  975|  17.4k|    }
   976|       |
-  977|      0|    output[0] = '\"';
-  978|      0|    output_pointer = output + 1;
+  977|    894|    output[0] = '\"';
+  978|    894|    output_pointer = output + 1;
   979|       |    /* copy the string */
-  980|      0|    for (input_pointer = input; *input_pointer != '\0'; (void)input_pointer++, output_pointer++)
-  981|      0|    {
-  982|      0|        if ((*input_pointer > 31) && (*input_pointer != '\"') && (*input_pointer != '\\'))
-  983|      0|        {
+  980|  39.0k|    for (input_pointer = input; *input_pointer != '\0'; (void)input_pointer++, output_pointer++)
+  981|  38.1k|    {
+  982|  38.1k|        if ((*input_pointer > 31) && (*input_pointer != '\"') && (*input_pointer != '\\'))
+  983|  20.5k|        {
   984|       |            /* normal character, copy */
-  985|      0|            *output_pointer = *input_pointer;
-  986|      0|        }
-  987|      0|        else
-  988|      0|        {
+  985|  20.5k|            *output_pointer = *input_pointer;
+  986|  20.5k|        }
+  987|  17.5k|        else
+  988|  17.5k|        {
   989|       |            /* character needs to be escaped */
-  990|      0|            *output_pointer++ = '\\';
-  991|      0|            switch (*input_pointer)
-  992|      0|            {
-  993|      0|                case '\\':
-  994|      0|                    *output_pointer = '\\';
-  995|      0|                    break;
-  996|      0|                case '\"':
-  997|      0|                    *output_pointer = '\"';
-  998|      0|                    break;
-  999|      0|                case '\b':
- 1000|      0|                    *output_pointer = 'b';
- 1001|      0|                    break;
- 1002|      0|                case '\f':
- 1003|      0|                    *output_pointer = 'f';
- 1004|      0|                    break;
- 1005|      0|                case '\n':
- 1006|      0|                    *output_pointer = 'n';
- 1007|      0|                    break;
- 1008|      0|                case '\r':
- 1009|      0|                    *output_pointer = 'r';
- 1010|      0|                    break;
- 1011|      0|                case '\t':
- 1012|      0|                    *output_pointer = 't';
- 1013|      0|                    break;
- 1014|      0|                default:
+  990|  17.5k|            *output_pointer++ = '\\';
+  991|  17.5k|            switch (*input_pointer)
+  992|  17.5k|            {
+  993|  1.34k|                case '\\':
+  994|  1.34k|                    *output_pointer = '\\';
+  995|  1.34k|                    break;
+  996|    804|                case '\"':
+  997|    804|                    *output_pointer = '\"';
+  998|    804|                    break;
+  999|  2.28k|                case '\b':
+ 1000|  2.28k|                    *output_pointer = 'b';
+ 1001|  2.28k|                    break;
+ 1002|  3.01k|                case '\f':
+ 1003|  3.01k|                    *output_pointer = 'f';
+ 1004|  3.01k|                    break;
+ 1005|  3.29k|                case '\n':
+ 1006|  3.29k|                    *output_pointer = 'n';
+ 1007|  3.29k|                    break;
+ 1008|  1.82k|                case '\r':
+ 1009|  1.82k|                    *output_pointer = 'r';
+ 1010|  1.82k|                    break;
+ 1011|  2.00k|                case '\t':
+ 1012|  2.00k|                    *output_pointer = 't';
+ 1013|  2.00k|                    break;
+ 1014|  3.03k|                default:
  1015|       |                    /* escape and print as unicode codepoint */
- 1016|      0|                    sprintf((char*)output_pointer, "u%04x", *input_pointer);
- 1017|      0|                    output_pointer += 4;
- 1018|      0|                    break;
- 1019|      0|            }
- 1020|      0|        }
- 1021|      0|    }
- 1022|      0|    output[output_length + 1] = '\"';
- 1023|      0|    output[output_length + 2] = '\0';
+ 1016|  3.03k|                    sprintf((char*)output_pointer, "u%04x", *input_pointer);
+ 1017|  3.03k|                    output_pointer += 4;
+ 1018|  3.03k|                    break;
+ 1019|  17.5k|            }
+ 1020|  17.5k|        }
+ 1021|  38.1k|    }
+ 1022|    894|    output[output_length + 1] = '\"';
+ 1023|    894|    output[output_length + 2] = '\0';
  1024|       |
- 1025|      0|    return true;
- 1026|      0|}
+ 1025|    894|    return true;
+ 1026|    894|}
  1027|       |
  1028|       |/* Invoke print_string_ptr (which is useful) on an item. */
  1029|       |static cJSON_bool print_string(const cJSON * const item, printbuffer * const p)
- 1030|      0|{
- 1031|      0|    return print_string_ptr((unsigned char*)item->valuestring, p);
- 1032|      0|}
+ 1030|  7.52k|{
+ 1031|  7.52k|    return print_string_ptr((unsigned char*)item->valuestring, p);
+ 1032|  7.52k|}
  1033|       |
  1034|       |/* Predeclare these prototypes. */
  1035|       |static cJSON_bool parse_value(cJSON * const item, parse_buffer * const input_buffer);
@@ -1042,95 +1042,95 @@
  1041|       |
  1042|       |/* Utility to jump whitespace and cr/lf */
  1043|       |static parse_buffer *buffer_skip_whitespace(parse_buffer * const buffer)
- 1044|   116k|{
- 1045|   116k|    if ((buffer == NULL) || (buffer->content == NULL))
+ 1044|   124k|{
+ 1045|   124k|    if ((buffer == NULL) || (buffer->content == NULL))
  1046|      0|    {
  1047|      0|        return NULL;
  1048|      0|    }
  1049|       |
- 1050|   116k|    if (cannot_access_at_index(buffer, 0))
+ 1050|   124k|    if (cannot_access_at_index(buffer, 0))
  1051|      0|    {
  1052|      0|        return buffer;
  1053|      0|    }
  1054|       |
- 1055|   190k|    while (can_access_at_index(buffer, 0) && (buffer_at_offset(buffer)[0] <= 32))
- 1056|  73.7k|    {
- 1057|  73.7k|       buffer->offset++;
- 1058|  73.7k|    }
+ 1055|   243k|    while (can_access_at_index(buffer, 0) && (buffer_at_offset(buffer)[0] <= 32))
+ 1056|   118k|    {
+ 1057|   118k|       buffer->offset++;
+ 1058|   118k|    }
  1059|       |
- 1060|   116k|    if (buffer->offset == buffer->length)
- 1061|    149|    {
- 1062|    149|        buffer->offset--;
- 1063|    149|    }
+ 1060|   124k|    if (buffer->offset == buffer->length)
+ 1061|    142|    {
+ 1062|    142|        buffer->offset--;
+ 1063|    142|    }
  1064|       |
- 1065|   116k|    return buffer;
- 1066|   116k|}
+ 1065|   124k|    return buffer;
+ 1066|   124k|}
  1067|       |
  1068|       |/* skip the UTF-8 BOM (byte order mark) if it is at the beginning of a buffer */
  1069|       |static parse_buffer *skip_utf8_bom(parse_buffer * const buffer)
- 1070|  1.79k|{
- 1071|  1.79k|    if ((buffer == NULL) || (buffer->content == NULL) || (buffer->offset != 0))
+ 1070|  2.11k|{
+ 1071|  2.11k|    if ((buffer == NULL) || (buffer->content == NULL) || (buffer->offset != 0))
  1072|      0|    {
  1073|      0|        return NULL;
  1074|      0|    }
  1075|       |
- 1076|  1.79k|    if (can_access_at_index(buffer, 4) && (strncmp((const char*)buffer_at_offset(buffer), "\xEF\xBB\xBF", 3) == 0))
+ 1076|  2.11k|    if (can_access_at_index(buffer, 4) && (strncmp((const char*)buffer_at_offset(buffer), "\xEF\xBB\xBF", 3) == 0))
  1077|      0|    {
  1078|      0|        buffer->offset += 3;
  1079|      0|    }
  1080|       |
- 1081|  1.79k|    return buffer;
- 1082|  1.79k|}
+ 1081|  2.11k|    return buffer;
+ 1082|  2.11k|}
  1083|       |
  1084|       |CJSON_PUBLIC(cJSON *) cJSON_ParseWithOpts(const char *value, const char **return_parse_end, cJSON_bool require_null_terminated)
- 1085|  1.79k|{
- 1086|  1.79k|    size_t buffer_length;
+ 1085|  2.11k|{
+ 1086|  2.11k|    size_t buffer_length;
  1087|       |
- 1088|  1.79k|    if (NULL == value)
+ 1088|  2.11k|    if (NULL == value)
  1089|      0|    {
  1090|      0|        return NULL;
  1091|      0|    }
  1092|       |
  1093|       |    /* Adding null character size due to require_null_terminated. */
- 1094|  1.79k|    buffer_length = strlen(value) + sizeof("");
+ 1094|  2.11k|    buffer_length = strlen(value) + sizeof("");
  1095|       |
- 1096|  1.79k|    return cJSON_ParseWithLengthOpts(value, buffer_length, return_parse_end, require_null_terminated);
- 1097|  1.79k|}
+ 1096|  2.11k|    return cJSON_ParseWithLengthOpts(value, buffer_length, return_parse_end, require_null_terminated);
+ 1097|  2.11k|}
  1098|       |
  1099|       |/* Parse an object - create a new root, and populate. */
  1100|       |CJSON_PUBLIC(cJSON *) cJSON_ParseWithLengthOpts(const char *value, size_t buffer_length, const char **return_parse_end, cJSON_bool require_null_terminated)
- 1101|  1.79k|{
- 1102|  1.79k|    parse_buffer buffer = { 0, 0, 0, 0, { 0, 0, 0 } };
- 1103|  1.79k|    cJSON *item = NULL;
+ 1101|  2.11k|{
+ 1102|  2.11k|    parse_buffer buffer = { 0, 0, 0, 0, { 0, 0, 0 } };
+ 1103|  2.11k|    cJSON *item = NULL;
  1104|       |
  1105|       |    /* reset error position */
- 1106|  1.79k|    global_error.json = NULL;
- 1107|  1.79k|    global_error.position = 0;
+ 1106|  2.11k|    global_error.json = NULL;
+ 1107|  2.11k|    global_error.position = 0;
  1108|       |
- 1109|  1.79k|    if (value == NULL || 0 == buffer_length)
+ 1109|  2.11k|    if (value == NULL || 0 == buffer_length)
  1110|      0|    {
  1111|      0|        goto fail;
  1112|      0|    }
  1113|       |
- 1114|  1.79k|    buffer.content = (const unsigned char*)value;
- 1115|  1.79k|    buffer.length = buffer_length;
- 1116|  1.79k|    buffer.offset = 0;
- 1117|  1.79k|    buffer.hooks = global_hooks;
+ 1114|  2.11k|    buffer.content = (const unsigned char*)value;
+ 1115|  2.11k|    buffer.length = buffer_length;
+ 1116|  2.11k|    buffer.offset = 0;
+ 1117|  2.11k|    buffer.hooks = global_hooks;
  1118|       |
- 1119|  1.79k|    item = cJSON_New_Item(&global_hooks);
- 1120|  1.79k|    if (item == NULL) /* memory fail */
+ 1119|  2.11k|    item = cJSON_New_Item(&global_hooks);
+ 1120|  2.11k|    if (item == NULL) /* memory fail */
  1121|      0|    {
  1122|      0|        goto fail;
  1123|      0|    }
  1124|       |
- 1125|  1.79k|    if (!parse_value(item, buffer_skip_whitespace(skip_utf8_bom(&buffer))))
- 1126|  1.07k|    {
+ 1125|  2.11k|    if (!parse_value(item, buffer_skip_whitespace(skip_utf8_bom(&buffer))))
+ 1126|  1.06k|    {
  1127|       |        /* parse failure. ep is set. */
- 1128|  1.07k|        goto fail;
- 1129|  1.07k|    }
+ 1128|  1.06k|        goto fail;
+ 1129|  1.06k|    }
  1130|       |
  1131|       |    /* if we require null-terminated JSON without appended garbage, skip and then check for a null terminator */
- 1132|    721|    if (require_null_terminated)
+ 1132|  1.05k|    if (require_null_terminated)
  1133|      0|    {
  1134|      0|        buffer_skip_whitespace(&buffer);
  1135|      0|        if ((buffer.offset >= buffer.length) || buffer_at_offset(&buffer)[0] != '\0')
@@ -1138,50 +1138,50 @@
  1137|      0|            goto fail;
  1138|      0|        }
  1139|      0|    }
- 1140|    721|    if (return_parse_end)
+ 1140|  1.05k|    if (return_parse_end)
  1141|      0|    {
  1142|      0|        *return_parse_end = (const char*)buffer_at_offset(&buffer);
  1143|      0|    }
  1144|       |
- 1145|    721|    return item;
+ 1145|  1.05k|    return item;
  1146|       |
- 1147|  1.07k|fail:
- 1148|  1.07k|    if (item != NULL)
- 1149|  1.07k|    {
- 1150|  1.07k|        cJSON_Delete(item);
- 1151|  1.07k|    }
+ 1147|  1.06k|fail:
+ 1148|  1.06k|    if (item != NULL)
+ 1149|  1.06k|    {
+ 1150|  1.06k|        cJSON_Delete(item);
+ 1151|  1.06k|    }
  1152|       |
- 1153|  1.07k|    if (value != NULL)
- 1154|  1.07k|    {
- 1155|  1.07k|        error local_error;
- 1156|  1.07k|        local_error.json = (const unsigned char*)value;
- 1157|  1.07k|        local_error.position = 0;
+ 1153|  1.06k|    if (value != NULL)
+ 1154|  1.06k|    {
+ 1155|  1.06k|        error local_error;
+ 1156|  1.06k|        local_error.json = (const unsigned char*)value;
+ 1157|  1.06k|        local_error.position = 0;
  1158|       |
- 1159|  1.07k|        if (buffer.offset < buffer.length)
- 1160|  1.07k|        {
- 1161|  1.07k|            local_error.position = buffer.offset;
- 1162|  1.07k|        }
- 1163|      5|        else if (buffer.length > 0)
- 1164|      5|        {
- 1165|      5|            local_error.position = buffer.length - 1;
- 1166|      5|        }
+ 1159|  1.06k|        if (buffer.offset < buffer.length)
+ 1160|  1.05k|        {
+ 1161|  1.05k|            local_error.position = buffer.offset;
+ 1162|  1.05k|        }
+ 1163|      6|        else if (buffer.length > 0)
+ 1164|      6|        {
+ 1165|      6|            local_error.position = buffer.length - 1;
+ 1166|      6|        }
  1167|       |
- 1168|  1.07k|        if (return_parse_end != NULL)
+ 1168|  1.06k|        if (return_parse_end != NULL)
  1169|      0|        {
  1170|      0|            *return_parse_end = (const char*)local_error.json + local_error.position;
  1171|      0|        }
  1172|       |
- 1173|  1.07k|        global_error = local_error;
- 1174|  1.07k|    }
+ 1173|  1.06k|        global_error = local_error;
+ 1174|  1.06k|    }
  1175|       |
- 1176|  1.07k|    return NULL;
- 1177|    721|}
+ 1176|  1.06k|    return NULL;
+ 1177|  1.05k|}
  1178|       |
  1179|       |/* Default options for cJSON_Parse */
  1180|       |CJSON_PUBLIC(cJSON *) cJSON_Parse(const char *value)
- 1181|  1.79k|{
- 1182|  1.79k|    return cJSON_ParseWithOpts(value, 0, 0);
- 1183|  1.79k|}
+ 1181|  2.11k|{
+ 1182|  2.11k|    return cJSON_ParseWithOpts(value, 0, 0);
+ 1183|  2.11k|}
  1184|       |
  1185|       |CJSON_PUBLIC(cJSON *) cJSON_ParseWithLength(const char *value, size_t buffer_length)
  1186|      0|{
@@ -1191,39 +1191,39 @@
  1190|      0|#define cjson_min(a, b) (((a) < (b)) ? (a) : (b))
  1191|       |
  1192|       |static unsigned char *print(const cJSON * const item, cJSON_bool format, const internal_hooks * const hooks)
- 1193|      0|{
- 1194|      0|    static const size_t default_buffer_size = 256;
- 1195|      0|    printbuffer buffer[1];
- 1196|      0|    unsigned char *printed = NULL;
+ 1193|    260|{
+ 1194|    260|    static const size_t default_buffer_size = 256;
+ 1195|    260|    printbuffer buffer[1];
+ 1196|    260|    unsigned char *printed = NULL;
  1197|       |
- 1198|      0|    memset(buffer, 0, sizeof(buffer));
+ 1198|    260|    memset(buffer, 0, sizeof(buffer));
  1199|       |
  1200|       |    /* create buffer */
- 1201|      0|    buffer->buffer = (unsigned char*) hooks->allocate(default_buffer_size);
- 1202|      0|    buffer->length = default_buffer_size;
- 1203|      0|    buffer->format = format;
- 1204|      0|    buffer->hooks = *hooks;
- 1205|      0|    if (buffer->buffer == NULL)
+ 1201|    260|    buffer->buffer = (unsigned char*) hooks->allocate(default_buffer_size);
+ 1202|    260|    buffer->length = default_buffer_size;
+ 1203|    260|    buffer->format = format;
+ 1204|    260|    buffer->hooks = *hooks;
+ 1205|    260|    if (buffer->buffer == NULL)
  1206|      0|    {
  1207|      0|        goto fail;
  1208|      0|    }
  1209|       |
  1210|       |    /* print the value */
- 1211|      0|    if (!print_value(item, buffer))
+ 1211|    260|    if (!print_value(item, buffer))
  1212|      0|    {
  1213|      0|        goto fail;
  1214|      0|    }
- 1215|      0|    update_offset(buffer);
+ 1215|    260|    update_offset(buffer);
  1216|       |
  1217|       |    /* check if reallocate is available */
- 1218|      0|    if (hooks->reallocate != NULL)
- 1219|      0|    {
- 1220|      0|        printed = (unsigned char*) hooks->reallocate(buffer->buffer, buffer->offset + 1);
- 1221|      0|        if (printed == NULL) {
+ 1218|    260|    if (hooks->reallocate != NULL)
+ 1219|    260|    {
+ 1220|    260|        printed = (unsigned char*) hooks->reallocate(buffer->buffer, buffer->offset + 1);
+ 1221|    260|        if (printed == NULL) {
  1222|      0|            goto fail;
  1223|      0|        }
- 1224|      0|        buffer->buffer = NULL;
- 1225|      0|    }
+ 1224|    260|        buffer->buffer = NULL;
+ 1225|    260|    }
  1226|      0|    else /* otherwise copy the JSON over to a new buffer */
  1227|      0|    {
  1228|      0|        printed = (unsigned char*) hooks->allocate(buffer->offset + 1);
@@ -1238,7 +1238,7 @@
  1237|      0|        hooks->deallocate(buffer->buffer);
  1238|      0|    }
  1239|       |
- 1240|      0|    return printed;
+ 1240|    260|    return printed;
  1241|       |
  1242|      0|fail:
  1243|      0|    if (buffer->buffer != NULL)
@@ -1252,48 +1252,48 @@
  1251|      0|    }
  1252|       |
  1253|      0|    return NULL;
- 1254|      0|}
+ 1254|    260|}
  1255|       |
  1256|       |/* Render a cJSON item/entity/structure to text. */
  1257|       |CJSON_PUBLIC(char *) cJSON_Print(const cJSON *item)
- 1258|      0|{
- 1259|      0|    return (char*)print(item, true, &global_hooks);
- 1260|      0|}
+ 1258|     49|{
+ 1259|     49|    return (char*)print(item, true, &global_hooks);
+ 1260|     49|}
  1261|       |
  1262|       |CJSON_PUBLIC(char *) cJSON_PrintUnformatted(const cJSON *item)
- 1263|      0|{
- 1264|      0|    return (char*)print(item, false, &global_hooks);
- 1265|      0|}
+ 1263|    211|{
+ 1264|    211|    return (char*)print(item, false, &global_hooks);
+ 1265|    211|}
  1266|       |
  1267|       |CJSON_PUBLIC(char *) cJSON_PrintBuffered(const cJSON *item, int prebuffer, cJSON_bool fmt)
- 1268|      0|{
- 1269|      0|    printbuffer p = { 0, 0, 0, 0, 0, 0, { 0, 0, 0 } };
+ 1268|    797|{
+ 1269|    797|    printbuffer p = { 0, 0, 0, 0, 0, 0, { 0, 0, 0 } };
  1270|       |
- 1271|      0|    if (prebuffer < 0)
+ 1271|    797|    if (prebuffer < 0)
  1272|      0|    {
  1273|      0|        return NULL;
  1274|      0|    }
  1275|       |
- 1276|      0|    p.buffer = (unsigned char*)global_hooks.allocate((size_t)prebuffer);
- 1277|      0|    if (!p.buffer)
+ 1276|    797|    p.buffer = (unsigned char*)global_hooks.allocate((size_t)prebuffer);
+ 1277|    797|    if (!p.buffer)
  1278|      0|    {
  1279|      0|        return NULL;
  1280|      0|    }
  1281|       |
- 1282|      0|    p.length = (size_t)prebuffer;
- 1283|      0|    p.offset = 0;
- 1284|      0|    p.noalloc = false;
- 1285|      0|    p.format = fmt;
- 1286|      0|    p.hooks = global_hooks;
+ 1282|    797|    p.length = (size_t)prebuffer;
+ 1283|    797|    p.offset = 0;
+ 1284|    797|    p.noalloc = false;
+ 1285|    797|    p.format = fmt;
+ 1286|    797|    p.hooks = global_hooks;
  1287|       |
- 1288|      0|    if (!print_value(item, &p))
+ 1288|    797|    if (!print_value(item, &p))
  1289|      0|    {
  1290|      0|        global_hooks.deallocate(p.buffer);
  1291|      0|        return NULL;
  1292|      0|    }
  1293|       |
- 1294|      0|    return (char*)p.buffer;
- 1295|      0|}
+ 1294|    797|    return (char*)p.buffer;
+ 1295|    797|}
  1296|       |
  1297|       |CJSON_PUBLIC(cJSON_bool) cJSON_PrintPreallocated(cJSON *item, char *buffer, const int length, const cJSON_bool format)
  1298|      0|{
@@ -1316,100 +1316,100 @@
  1315|       |
  1316|       |/* Parser core - when encountering text, process appropriately. */
  1317|       |static cJSON_bool parse_value(cJSON * const item, parse_buffer * const input_buffer)
- 1318|  42.7k|{
- 1319|  42.7k|    if ((input_buffer == NULL) || (input_buffer->content == NULL))
+ 1318|  40.4k|{
+ 1319|  40.4k|    if ((input_buffer == NULL) || (input_buffer->content == NULL))
  1320|      0|    {
  1321|      0|        return false; /* no input */
  1322|      0|    }
  1323|       |
  1324|       |    /* parse the different types of values */
  1325|       |    /* null */
- 1326|  42.7k|    if (can_read(input_buffer, 4) && (strncmp((const char*)buffer_at_offset(input_buffer), "null", 4) == 0))
- 1327|    177|    {
- 1328|    177|        item->type = cJSON_NULL;
- 1329|    177|        input_buffer->offset += 4;
- 1330|    177|        return true;
- 1331|    177|    }
+ 1326|  40.4k|    if (can_read(input_buffer, 4) && (strncmp((const char*)buffer_at_offset(input_buffer), "null", 4) == 0))
+ 1327|    359|    {
+ 1328|    359|        item->type = cJSON_NULL;
+ 1329|    359|        input_buffer->offset += 4;
+ 1330|    359|        return true;
+ 1331|    359|    }
  1332|       |    /* false */
- 1333|  42.5k|    if (can_read(input_buffer, 5) && (strncmp((const char*)buffer_at_offset(input_buffer), "false", 5) == 0))
- 1334|    549|    {
- 1335|    549|        item->type = cJSON_False;
- 1336|    549|        input_buffer->offset += 5;
- 1337|    549|        return true;
- 1338|    549|    }
+ 1333|  40.1k|    if (can_read(input_buffer, 5) && (strncmp((const char*)buffer_at_offset(input_buffer), "false", 5) == 0))
+ 1334|    498|    {
+ 1335|    498|        item->type = cJSON_False;
+ 1336|    498|        input_buffer->offset += 5;
+ 1337|    498|        return true;
+ 1338|    498|    }
  1339|       |    /* true */
- 1340|  42.0k|    if (can_read(input_buffer, 4) && (strncmp((const char*)buffer_at_offset(input_buffer), "true", 4) == 0))
- 1341|     95|    {
- 1342|     95|        item->type = cJSON_True;
- 1343|     95|        item->valueint = 1;
- 1344|     95|        input_buffer->offset += 4;
- 1345|     95|        return true;
- 1346|     95|    }
+ 1340|  39.6k|    if (can_read(input_buffer, 4) && (strncmp((const char*)buffer_at_offset(input_buffer), "true", 4) == 0))
+ 1341|    156|    {
+ 1342|    156|        item->type = cJSON_True;
+ 1343|    156|        item->valueint = 1;
+ 1344|    156|        input_buffer->offset += 4;
+ 1345|    156|        return true;
+ 1346|    156|    }
  1347|       |    /* string */
- 1348|  41.9k|    if (can_access_at_index(input_buffer, 0) && (buffer_at_offset(input_buffer)[0] == '\"'))
- 1349|  13.5k|    {
- 1350|  13.5k|        return parse_string(item, input_buffer);
- 1351|  13.5k|    }
+ 1348|  39.4k|    if (can_access_at_index(input_buffer, 0) && (buffer_at_offset(input_buffer)[0] == '\"'))
+ 1349|  11.1k|    {
+ 1350|  11.1k|        return parse_string(item, input_buffer);
+ 1351|  11.1k|    }
  1352|       |    /* number */
  1353|  28.3k|    if (can_access_at_index(input_buffer, 0) && ((buffer_at_offset(input_buffer)[0] == '-') || ((buffer_at_offset(input_buffer)[0] >= '0') && (buffer_at_offset(input_buffer)[0] <= '9'))))
- 1354|  8.32k|    {
- 1355|  8.32k|        return parse_number(item, input_buffer);
- 1356|  8.32k|    }
+ 1354|  10.5k|    {
+ 1355|  10.5k|        return parse_number(item, input_buffer);
+ 1356|  10.5k|    }
  1357|       |    /* array */
- 1358|  19.9k|    if (can_access_at_index(input_buffer, 0) && (buffer_at_offset(input_buffer)[0] == '['))
- 1359|  16.4k|    {
- 1360|  16.4k|        return parse_array(item, input_buffer);
- 1361|  16.4k|    }
+ 1358|  17.8k|    if (can_access_at_index(input_buffer, 0) && (buffer_at_offset(input_buffer)[0] == '['))
+ 1359|  12.4k|    {
+ 1360|  12.4k|        return parse_array(item, input_buffer);
+ 1361|  12.4k|    }
  1362|       |    /* object */
- 1363|  3.56k|    if (can_access_at_index(input_buffer, 0) && (buffer_at_offset(input_buffer)[0] == '{'))
- 1364|  3.38k|    {
- 1365|  3.38k|        return parse_object(item, input_buffer);
- 1366|  3.38k|    }
+ 1363|  5.40k|    if (can_access_at_index(input_buffer, 0) && (buffer_at_offset(input_buffer)[0] == '{'))
+ 1364|  5.25k|    {
+ 1365|  5.25k|        return parse_object(item, input_buffer);
+ 1366|  5.25k|    }
  1367|       |
- 1368|    178|    return false;
- 1369|  3.56k|}
+ 1368|    152|    return false;
+ 1369|  5.40k|}
  1370|       |
  1371|       |/* Render a value to text. */
  1372|       |static cJSON_bool print_value(const cJSON * const item, printbuffer * const output_buffer)
- 1373|      0|{
- 1374|      0|    unsigned char *output = NULL;
+ 1373|  20.2k|{
+ 1374|  20.2k|    unsigned char *output = NULL;
  1375|       |
- 1376|      0|    if ((item == NULL) || (output_buffer == NULL))
+ 1376|  20.2k|    if ((item == NULL) || (output_buffer == NULL))
  1377|      0|    {
  1378|      0|        return false;
  1379|      0|    }
  1380|       |
- 1381|      0|    switch ((item->type) & 0xFF)
- 1382|      0|    {
- 1383|      0|        case cJSON_NULL:
- 1384|      0|            output = ensure(output_buffer, 5);
- 1385|      0|            if (output == NULL)
+ 1381|  20.2k|    switch ((item->type) & 0xFF)
+ 1382|  20.2k|    {
+ 1383|    241|        case cJSON_NULL:
+ 1384|    241|            output = ensure(output_buffer, 5);
+ 1385|    241|            if (output == NULL)
  1386|      0|            {
  1387|      0|                return false;
  1388|      0|            }
- 1389|      0|            strcpy((char*)output, "null");
- 1390|      0|            return true;
+ 1389|    241|            strcpy((char*)output, "null");
+ 1390|    241|            return true;
  1391|       |
- 1392|      0|        case cJSON_False:
- 1393|      0|            output = ensure(output_buffer, 6);
- 1394|      0|            if (output == NULL)
+ 1392|    379|        case cJSON_False:
+ 1393|    379|            output = ensure(output_buffer, 6);
+ 1394|    379|            if (output == NULL)
  1395|      0|            {
  1396|      0|                return false;
  1397|      0|            }
- 1398|      0|            strcpy((char*)output, "false");
- 1399|      0|            return true;
+ 1398|    379|            strcpy((char*)output, "false");
+ 1399|    379|            return true;
  1400|       |
- 1401|      0|        case cJSON_True:
- 1402|      0|            output = ensure(output_buffer, 5);
- 1403|      0|            if (output == NULL)
+ 1401|    110|        case cJSON_True:
+ 1402|    110|            output = ensure(output_buffer, 5);
+ 1403|    110|            if (output == NULL)
  1404|      0|            {
  1405|      0|                return false;
  1406|      0|            }
- 1407|      0|            strcpy((char*)output, "true");
- 1408|      0|            return true;
+ 1407|    110|            strcpy((char*)output, "true");
+ 1408|    110|            return true;
  1409|       |
- 1410|      0|        case cJSON_Number:
- 1411|      0|            return print_number(item, output_buffer);
+ 1410|  4.85k|        case cJSON_Number:
+ 1411|  4.85k|            return print_number(item, output_buffer);
  1412|       |
  1413|      0|        case cJSON_Raw:
  1414|      0|        {
@@ -1429,406 +1429,406 @@
  1428|      0|            return true;
  1429|      0|        }
  1430|       |
- 1431|      0|        case cJSON_String:
- 1432|      0|            return print_string(item, output_buffer);
+ 1431|  7.52k|        case cJSON_String:
+ 1432|  7.52k|            return print_string(item, output_buffer);
  1433|       |
- 1434|      0|        case cJSON_Array:
- 1435|      0|            return print_array(item, output_buffer);
+ 1434|  3.99k|        case cJSON_Array:
+ 1435|  3.99k|            return print_array(item, output_buffer);
  1436|       |
- 1437|      0|        case cJSON_Object:
- 1438|      0|            return print_object(item, output_buffer);
+ 1437|  3.15k|        case cJSON_Object:
+ 1438|  3.15k|            return print_object(item, output_buffer);
  1439|       |
  1440|      0|        default:
  1441|      0|            return false;
- 1442|      0|    }
- 1443|      0|}
+ 1442|  20.2k|    }
+ 1443|  20.2k|}
  1444|       |
  1445|       |/* Build an array from input text. */
  1446|       |static cJSON_bool parse_array(cJSON * const item, parse_buffer * const input_buffer)
- 1447|  16.4k|{
- 1448|  16.4k|    cJSON *head = NULL; /* head of the linked list */
- 1449|  16.4k|    cJSON *current_item = NULL;
+ 1447|  12.4k|{
+ 1448|  12.4k|    cJSON *head = NULL; /* head of the linked list */
+ 1449|  12.4k|    cJSON *current_item = NULL;
  1450|       |
- 1451|  16.4k|    if (input_buffer->depth >= CJSON_NESTING_LIMIT)
- 1452|      2|    {
- 1453|      2|        return false; /* to deeply nested */
- 1454|      2|    }
- 1455|  16.4k|    input_buffer->depth++;
+ 1451|  12.4k|    if (input_buffer->depth >= CJSON_NESTING_LIMIT)
+ 1452|      0|    {
+ 1453|      0|        return false; /* to deeply nested */
+ 1454|      0|    }
+ 1455|  12.4k|    input_buffer->depth++;
  1456|       |
- 1457|  16.4k|    if (buffer_at_offset(input_buffer)[0] != '[')
+ 1457|  12.4k|    if (buffer_at_offset(input_buffer)[0] != '[')
  1458|      0|    {
  1459|       |        /* not an array */
  1460|      0|        goto fail;
  1461|      0|    }
  1462|       |
- 1463|  16.4k|    input_buffer->offset++;
- 1464|  16.4k|    buffer_skip_whitespace(input_buffer);
- 1465|  16.4k|    if (can_access_at_index(input_buffer, 0) && (buffer_at_offset(input_buffer)[0] == ']'))
- 1466|  1.93k|    {
+ 1463|  12.4k|    input_buffer->offset++;
+ 1464|  12.4k|    buffer_skip_whitespace(input_buffer);
+ 1465|  12.4k|    if (can_access_at_index(input_buffer, 0) && (buffer_at_offset(input_buffer)[0] == ']'))
+ 1466|  3.80k|    {
  1467|       |        /* empty array */
- 1468|  1.93k|        goto success;
- 1469|  1.93k|    }
+ 1468|  3.80k|        goto success;
+ 1469|  3.80k|    }
  1470|       |
  1471|       |    /* check if we skipped to the end of the buffer */
- 1472|  14.4k|    if (cannot_access_at_index(input_buffer, 0))
+ 1472|  8.63k|    if (cannot_access_at_index(input_buffer, 0))
  1473|      0|    {
  1474|      0|        input_buffer->offset--;
  1475|      0|        goto fail;
  1476|      0|    }
  1477|       |
  1478|       |    /* step back to character in front of the first element */
- 1479|  14.4k|    input_buffer->offset--;
+ 1479|  8.63k|    input_buffer->offset--;
  1480|       |    /* loop through the comma separated array elements */
- 1481|  14.4k|    do
- 1482|  29.9k|    {
+ 1481|  8.63k|    do
+ 1482|  22.1k|    {
  1483|       |        /* allocate next item */
- 1484|  29.9k|        cJSON *new_item = cJSON_New_Item(&(input_buffer->hooks));
- 1485|  29.9k|        if (new_item == NULL)
+ 1484|  22.1k|        cJSON *new_item = cJSON_New_Item(&(input_buffer->hooks));
+ 1485|  22.1k|        if (new_item == NULL)
  1486|      0|        {
  1487|      0|            goto fail; /* allocation failure */
  1488|      0|        }
  1489|       |
  1490|       |        /* attach next item to list */
- 1491|  29.9k|        if (head == NULL)
- 1492|  14.4k|        {
+ 1491|  22.1k|        if (head == NULL)
+ 1492|  8.63k|        {
  1493|       |            /* start the linked list */
- 1494|  14.4k|            current_item = head = new_item;
- 1495|  14.4k|        }
- 1496|  15.4k|        else
- 1497|  15.4k|        {
+ 1494|  8.63k|            current_item = head = new_item;
+ 1495|  8.63k|        }
+ 1496|  13.5k|        else
+ 1497|  13.5k|        {
  1498|       |            /* add to the end and advance */
- 1499|  15.4k|            current_item->next = new_item;
- 1500|  15.4k|            new_item->prev = current_item;
- 1501|  15.4k|            current_item = new_item;
- 1502|  15.4k|        }
+ 1499|  13.5k|            current_item->next = new_item;
+ 1500|  13.5k|            new_item->prev = current_item;
+ 1501|  13.5k|            current_item = new_item;
+ 1502|  13.5k|        }
  1503|       |
  1504|       |        /* parse next value */
- 1505|  29.9k|        input_buffer->offset++;
- 1506|  29.9k|        buffer_skip_whitespace(input_buffer);
- 1507|  29.9k|        if (!parse_value(current_item, input_buffer))
- 1508|  7.58k|        {
- 1509|  7.58k|            goto fail; /* failed to parse value */
- 1510|  7.58k|        }
- 1511|  22.3k|        buffer_skip_whitespace(input_buffer);
- 1512|  22.3k|    }
- 1513|  22.3k|    while (can_access_at_index(input_buffer, 0) && (buffer_at_offset(input_buffer)[0] == ','));
+ 1505|  22.1k|        input_buffer->offset++;
+ 1506|  22.1k|        buffer_skip_whitespace(input_buffer);
+ 1507|  22.1k|        if (!parse_value(current_item, input_buffer))
+ 1508|  4.14k|        {
+ 1509|  4.14k|            goto fail; /* failed to parse value */
+ 1510|  4.14k|        }
+ 1511|  18.0k|        buffer_skip_whitespace(input_buffer);
+ 1512|  18.0k|    }
+ 1513|  18.0k|    while (can_access_at_index(input_buffer, 0) && (buffer_at_offset(input_buffer)[0] == ','));
  1514|       |
- 1515|  6.91k|    if (cannot_access_at_index(input_buffer, 0) || buffer_at_offset(input_buffer)[0] != ']')
- 1516|    416|    {
- 1517|    416|        goto fail; /* expected end of array */
- 1518|    416|    }
+ 1515|  4.49k|    if (cannot_access_at_index(input_buffer, 0) || buffer_at_offset(input_buffer)[0] != ']')
+ 1516|    143|    {
+ 1517|    143|        goto fail; /* expected end of array */
+ 1518|    143|    }
  1519|       |
- 1520|  8.43k|success:
- 1521|  8.43k|    input_buffer->depth--;
+ 1520|  8.15k|success:
+ 1521|  8.15k|    input_buffer->depth--;
  1522|       |
- 1523|  8.43k|    if (head != NULL) {
- 1524|  6.49k|        head->prev = current_item;
- 1525|  6.49k|    }
+ 1523|  8.15k|    if (head != NULL) {
+ 1524|  4.34k|        head->prev = current_item;
+ 1525|  4.34k|    }
  1526|       |
- 1527|  8.43k|    item->type = cJSON_Array;
- 1528|  8.43k|    item->child = head;
+ 1527|  8.15k|    item->type = cJSON_Array;
+ 1528|  8.15k|    item->child = head;
  1529|       |
- 1530|  8.43k|    input_buffer->offset++;
+ 1530|  8.15k|    input_buffer->offset++;
  1531|       |
- 1532|  8.43k|    return true;
+ 1532|  8.15k|    return true;
  1533|       |
- 1534|  7.99k|fail:
- 1535|  7.99k|    if (head != NULL)
- 1536|  7.99k|    {
- 1537|  7.99k|        cJSON_Delete(head);
- 1538|  7.99k|    }
+ 1534|  4.28k|fail:
+ 1535|  4.28k|    if (head != NULL)
+ 1536|  4.28k|    {
+ 1537|  4.28k|        cJSON_Delete(head);
+ 1538|  4.28k|    }
  1539|       |
- 1540|  7.99k|    return false;
- 1541|  6.91k|}
+ 1540|  4.28k|    return false;
+ 1541|  4.49k|}
  1542|       |
  1543|       |/* Render an array to text */
  1544|       |static cJSON_bool print_array(const cJSON * const item, printbuffer * const output_buffer)
- 1545|      0|{
- 1546|      0|    unsigned char *output_pointer = NULL;
- 1547|      0|    size_t length = 0;
- 1548|      0|    cJSON *current_element = item->child;
+ 1545|  3.99k|{
+ 1546|  3.99k|    unsigned char *output_pointer = NULL;
+ 1547|  3.99k|    size_t length = 0;
+ 1548|  3.99k|    cJSON *current_element = item->child;
  1549|       |
- 1550|      0|    if (output_buffer == NULL)
+ 1550|  3.99k|    if (output_buffer == NULL)
  1551|      0|    {
  1552|      0|        return false;
  1553|      0|    }
  1554|       |
  1555|       |    /* Compose the output array. */
  1556|       |    /* opening square bracket */
- 1557|      0|    output_pointer = ensure(output_buffer, 1);
- 1558|      0|    if (output_pointer == NULL)
+ 1557|  3.99k|    output_pointer = ensure(output_buffer, 1);
+ 1558|  3.99k|    if (output_pointer == NULL)
  1559|      0|    {
  1560|      0|        return false;
  1561|      0|    }
  1562|       |
- 1563|      0|    *output_pointer = '[';
- 1564|      0|    output_buffer->offset++;
- 1565|      0|    output_buffer->depth++;
+ 1563|  3.99k|    *output_pointer = '[';
+ 1564|  3.99k|    output_buffer->offset++;
+ 1565|  3.99k|    output_buffer->depth++;
  1566|       |
- 1567|      0|    while (current_element != NULL)
- 1568|      0|    {
- 1569|      0|        if (!print_value(current_element, output_buffer))
+ 1567|  12.3k|    while (current_element != NULL)
+ 1568|  8.38k|    {
+ 1569|  8.38k|        if (!print_value(current_element, output_buffer))
  1570|      0|        {
  1571|      0|            return false;
  1572|      0|        }
- 1573|      0|        update_offset(output_buffer);
- 1574|      0|        if (current_element->next)
- 1575|      0|        {
- 1576|      0|            length = (size_t) (output_buffer->format ? 2 : 1);
- 1577|      0|            output_pointer = ensure(output_buffer, length + 1);
- 1578|      0|            if (output_pointer == NULL)
+ 1573|  8.38k|        update_offset(output_buffer);
+ 1574|  8.38k|        if (current_element->next)
+ 1575|  6.09k|        {
+ 1576|  6.09k|            length = (size_t) (output_buffer->format ? 2 : 1);
+ 1577|  6.09k|            output_pointer = ensure(output_buffer, length + 1);
+ 1578|  6.09k|            if (output_pointer == NULL)
  1579|      0|            {
  1580|      0|                return false;
  1581|      0|            }
- 1582|      0|            *output_pointer++ = ',';
- 1583|      0|            if(output_buffer->format)
- 1584|      0|            {
- 1585|      0|                *output_pointer++ = ' ';
- 1586|      0|            }
- 1587|      0|            *output_pointer = '\0';
- 1588|      0|            output_buffer->offset += length;
- 1589|      0|        }
- 1590|      0|        current_element = current_element->next;
- 1591|      0|    }
+ 1582|  6.09k|            *output_pointer++ = ',';
+ 1583|  6.09k|            if(output_buffer->format)
+ 1584|  3.65k|            {
+ 1585|  3.65k|                *output_pointer++ = ' ';
+ 1586|  3.65k|            }
+ 1587|  6.09k|            *output_pointer = '\0';
+ 1588|  6.09k|            output_buffer->offset += length;
+ 1589|  6.09k|        }
+ 1590|  8.38k|        current_element = current_element->next;
+ 1591|  8.38k|    }
  1592|       |
- 1593|      0|    output_pointer = ensure(output_buffer, 2);
- 1594|      0|    if (output_pointer == NULL)
+ 1593|  3.99k|    output_pointer = ensure(output_buffer, 2);
+ 1594|  3.99k|    if (output_pointer == NULL)
  1595|      0|    {
  1596|      0|        return false;
  1597|      0|    }
- 1598|      0|    *output_pointer++ = ']';
- 1599|      0|    *output_pointer = '\0';
- 1600|      0|    output_buffer->depth--;
+ 1598|  3.99k|    *output_pointer++ = ']';
+ 1599|  3.99k|    *output_pointer = '\0';
+ 1600|  3.99k|    output_buffer->depth--;
  1601|       |
- 1602|      0|    return true;
- 1603|      0|}
+ 1602|  3.99k|    return true;
+ 1603|  3.99k|}
  1604|       |
  1605|       |/* Build an object from the text. */
  1606|       |static cJSON_bool parse_object(cJSON * const item, parse_buffer * const input_buffer)
- 1607|  3.38k|{
- 1608|  3.38k|    cJSON *head = NULL; /* linked list head */
- 1609|  3.38k|    cJSON *current_item = NULL;
+ 1607|  5.25k|{
+ 1608|  5.25k|    cJSON *head = NULL; /* linked list head */
+ 1609|  5.25k|    cJSON *current_item = NULL;
  1610|       |
- 1611|  3.38k|    if (input_buffer->depth >= CJSON_NESTING_LIMIT)
- 1612|      2|    {
- 1613|      2|        return false; /* to deeply nested */
- 1614|      2|    }
- 1615|  3.38k|    input_buffer->depth++;
+ 1611|  5.25k|    if (input_buffer->depth >= CJSON_NESTING_LIMIT)
+ 1612|      0|    {
+ 1613|      0|        return false; /* to deeply nested */
+ 1614|      0|    }
+ 1615|  5.25k|    input_buffer->depth++;
  1616|       |
- 1617|  3.38k|    if (cannot_access_at_index(input_buffer, 0) || (buffer_at_offset(input_buffer)[0] != '{'))
+ 1617|  5.25k|    if (cannot_access_at_index(input_buffer, 0) || (buffer_at_offset(input_buffer)[0] != '{'))
  1618|      0|    {
  1619|      0|        goto fail; /* not an object */
  1620|      0|    }
  1621|       |
- 1622|  3.38k|    input_buffer->offset++;
- 1623|  3.38k|    buffer_skip_whitespace(input_buffer);
- 1624|  3.38k|    if (can_access_at_index(input_buffer, 0) && (buffer_at_offset(input_buffer)[0] == '}'))
- 1625|    297|    {
- 1626|    297|        goto success; /* empty object */
- 1627|    297|    }
+ 1622|  5.25k|    input_buffer->offset++;
+ 1623|  5.25k|    buffer_skip_whitespace(input_buffer);
+ 1624|  5.25k|    if (can_access_at_index(input_buffer, 0) && (buffer_at_offset(input_buffer)[0] == '}'))
+ 1625|    163|    {
+ 1626|    163|        goto success; /* empty object */
+ 1627|    163|    }
  1628|       |
  1629|       |    /* check if we skipped to the end of the buffer */
- 1630|  3.08k|    if (cannot_access_at_index(input_buffer, 0))
+ 1630|  5.08k|    if (cannot_access_at_index(input_buffer, 0))
  1631|      0|    {
  1632|      0|        input_buffer->offset--;
  1633|      0|        goto fail;
  1634|      0|    }
  1635|       |
  1636|       |    /* step back to character in front of the first element */
- 1637|  3.08k|    input_buffer->offset--;
+ 1637|  5.08k|    input_buffer->offset--;
  1638|       |    /* loop through the comma separated array elements */
- 1639|  3.08k|    do
- 1640|  11.0k|    {
+ 1639|  5.08k|    do
+ 1640|  16.6k|    {
  1641|       |        /* allocate next item */
- 1642|  11.0k|        cJSON *new_item = cJSON_New_Item(&(input_buffer->hooks));
- 1643|  11.0k|        if (new_item == NULL)
+ 1642|  16.6k|        cJSON *new_item = cJSON_New_Item(&(input_buffer->hooks));
+ 1643|  16.6k|        if (new_item == NULL)
  1644|      0|        {
  1645|      0|            goto fail; /* allocation failure */
  1646|      0|        }
  1647|       |
  1648|       |        /* attach next item to list */
- 1649|  11.0k|        if (head == NULL)
- 1650|  3.08k|        {
+ 1649|  16.6k|        if (head == NULL)
+ 1650|  5.08k|        {
  1651|       |            /* start the linked list */
- 1652|  3.08k|            current_item = head = new_item;
- 1653|  3.08k|        }
- 1654|  7.99k|        else
- 1655|  7.99k|        {
+ 1652|  5.08k|            current_item = head = new_item;
+ 1653|  5.08k|        }
+ 1654|  11.5k|        else
+ 1655|  11.5k|        {
  1656|       |            /* add to the end and advance */
- 1657|  7.99k|            current_item->next = new_item;
- 1658|  7.99k|            new_item->prev = current_item;
- 1659|  7.99k|            current_item = new_item;
- 1660|  7.99k|        }
+ 1657|  11.5k|            current_item->next = new_item;
+ 1658|  11.5k|            new_item->prev = current_item;
+ 1659|  11.5k|            current_item = new_item;
+ 1660|  11.5k|        }
  1661|       |
  1662|       |        /* parse the name of the child */
- 1663|  11.0k|        input_buffer->offset++;
- 1664|  11.0k|        buffer_skip_whitespace(input_buffer);
- 1665|  11.0k|        if (!parse_string(current_item, input_buffer))
- 1666|     63|        {
- 1667|     63|            goto fail; /* failed to parse name */
- 1668|     63|        }
- 1669|  11.0k|        buffer_skip_whitespace(input_buffer);
+ 1663|  16.6k|        input_buffer->offset++;
+ 1664|  16.6k|        buffer_skip_whitespace(input_buffer);
+ 1665|  16.6k|        if (!parse_string(current_item, input_buffer))
+ 1666|    175|        {
+ 1667|    175|            goto fail; /* failed to parse name */
+ 1668|    175|        }
+ 1669|  16.4k|        buffer_skip_whitespace(input_buffer);
  1670|       |
  1671|       |        /* swap valuestring and string, because we parsed the name */
- 1672|  11.0k|        current_item->string = current_item->valuestring;
- 1673|  11.0k|        current_item->valuestring = NULL;
+ 1672|  16.4k|        current_item->string = current_item->valuestring;
+ 1673|  16.4k|        current_item->valuestring = NULL;
  1674|       |
- 1675|  11.0k|        if (cannot_access_at_index(input_buffer, 0) || (buffer_at_offset(input_buffer)[0] != ':'))
- 1676|     49|        {
- 1677|     49|            goto fail; /* invalid object */
- 1678|     49|        }
+ 1675|  16.4k|        if (cannot_access_at_index(input_buffer, 0) || (buffer_at_offset(input_buffer)[0] != ':'))
+ 1676|    250|        {
+ 1677|    250|            goto fail; /* invalid object */
+ 1678|    250|        }
  1679|       |
  1680|       |        /* parse the value */
- 1681|  10.9k|        input_buffer->offset++;
- 1682|  10.9k|        buffer_skip_whitespace(input_buffer);
- 1683|  10.9k|        if (!parse_value(current_item, input_buffer))
- 1684|  1.09k|        {
- 1685|  1.09k|            goto fail; /* failed to parse value */
- 1686|  1.09k|        }
- 1687|  9.87k|        buffer_skip_whitespace(input_buffer);
- 1688|  9.87k|    }
- 1689|  9.87k|    while (can_access_at_index(input_buffer, 0) && (buffer_at_offset(input_buffer)[0] == ','));
+ 1681|  16.1k|        input_buffer->offset++;
+ 1682|  16.1k|        buffer_skip_whitespace(input_buffer);
+ 1683|  16.1k|        if (!parse_value(current_item, input_buffer))
+ 1684|    622|        {
+ 1685|    622|            goto fail; /* failed to parse value */
+ 1686|    622|        }
+ 1687|  15.5k|        buffer_skip_whitespace(input_buffer);
+ 1688|  15.5k|    }
+ 1689|  15.5k|    while (can_access_at_index(input_buffer, 0) && (buffer_at_offset(input_buffer)[0] == ','));
  1690|       |
- 1691|  1.87k|    if (cannot_access_at_index(input_buffer, 0) || (buffer_at_offset(input_buffer)[0] != '}'))
- 1692|     92|    {
- 1693|     92|        goto fail; /* expected end of object */
- 1694|     92|    }
+ 1691|  4.04k|    if (cannot_access_at_index(input_buffer, 0) || (buffer_at_offset(input_buffer)[0] != '}'))
+ 1692|    242|    {
+ 1693|    242|        goto fail; /* expected end of object */
+ 1694|    242|    }
  1695|       |
- 1696|  2.08k|success:
- 1697|  2.08k|    input_buffer->depth--;
+ 1696|  3.96k|success:
+ 1697|  3.96k|    input_buffer->depth--;
  1698|       |
- 1699|  2.08k|    if (head != NULL) {
- 1700|  1.78k|        head->prev = current_item;
- 1701|  1.78k|    }
+ 1699|  3.96k|    if (head != NULL) {
+ 1700|  3.80k|        head->prev = current_item;
+ 1701|  3.80k|    }
  1702|       |
- 1703|  2.08k|    item->type = cJSON_Object;
- 1704|  2.08k|    item->child = head;
+ 1703|  3.96k|    item->type = cJSON_Object;
+ 1704|  3.96k|    item->child = head;
  1705|       |
- 1706|  2.08k|    input_buffer->offset++;
- 1707|  2.08k|    return true;
+ 1706|  3.96k|    input_buffer->offset++;
+ 1707|  3.96k|    return true;
  1708|       |
- 1709|  1.30k|fail:
- 1710|  1.30k|    if (head != NULL)
- 1711|  1.30k|    {
- 1712|  1.30k|        cJSON_Delete(head);
- 1713|  1.30k|    }
+ 1709|  1.28k|fail:
+ 1710|  1.28k|    if (head != NULL)
+ 1711|  1.28k|    {
+ 1712|  1.28k|        cJSON_Delete(head);
+ 1713|  1.28k|    }
  1714|       |
- 1715|  1.30k|    return false;
- 1716|  1.87k|}
+ 1715|  1.28k|    return false;
+ 1716|  4.04k|}
  1717|       |
  1718|       |/* Render an object to text. */
  1719|       |static cJSON_bool print_object(const cJSON * const item, printbuffer * const output_buffer)
- 1720|      0|{
- 1721|      0|    unsigned char *output_pointer = NULL;
- 1722|      0|    size_t length = 0;
- 1723|      0|    cJSON *current_item = item->child;
+ 1720|  3.15k|{
+ 1721|  3.15k|    unsigned char *output_pointer = NULL;
+ 1722|  3.15k|    size_t length = 0;
+ 1723|  3.15k|    cJSON *current_item = item->child;
  1724|       |
- 1725|      0|    if (output_buffer == NULL)
+ 1725|  3.15k|    if (output_buffer == NULL)
  1726|      0|    {
  1727|      0|        return false;
  1728|      0|    }
  1729|       |
  1730|       |    /* Compose the output: */
- 1731|      0|    length = (size_t) (output_buffer->format ? 2 : 1); /* fmt: {\n */
- 1732|      0|    output_pointer = ensure(output_buffer, length + 1);
- 1733|      0|    if (output_pointer == NULL)
+ 1731|  3.15k|    length = (size_t) (output_buffer->format ? 2 : 1); /* fmt: {\n */
+ 1732|  3.15k|    output_pointer = ensure(output_buffer, length + 1);
+ 1733|  3.15k|    if (output_pointer == NULL)
  1734|      0|    {
  1735|      0|        return false;
  1736|      0|    }
  1737|       |
- 1738|      0|    *output_pointer++ = '{';
- 1739|      0|    output_buffer->depth++;
- 1740|      0|    if (output_buffer->format)
- 1741|      0|    {
- 1742|      0|        *output_pointer++ = '\n';
- 1743|      0|    }
- 1744|      0|    output_buffer->offset += length;
+ 1738|  3.15k|    *output_pointer++ = '{';
+ 1739|  3.15k|    output_buffer->depth++;
+ 1740|  3.15k|    if (output_buffer->format)
+ 1741|  2.74k|    {
+ 1742|  2.74k|        *output_pointer++ = '\n';
+ 1743|  2.74k|    }
+ 1744|  3.15k|    output_buffer->offset += length;
  1745|       |
- 1746|      0|    while (current_item)
- 1747|      0|    {
- 1748|      0|        if (output_buffer->format)
- 1749|      0|        {
- 1750|      0|            size_t i;
- 1751|      0|            output_pointer = ensure(output_buffer, output_buffer->depth);
- 1752|      0|            if (output_pointer == NULL)
+ 1746|  13.9k|    while (current_item)
+ 1747|  10.8k|    {
+ 1748|  10.8k|        if (output_buffer->format)
+ 1749|  9.57k|        {
+ 1750|  9.57k|            size_t i;
+ 1751|  9.57k|            output_pointer = ensure(output_buffer, output_buffer->depth);
+ 1752|  9.57k|            if (output_pointer == NULL)
  1753|      0|            {
  1754|      0|                return false;
  1755|      0|            }
- 1756|      0|            for (i = 0; i < output_buffer->depth; i++)
- 1757|      0|            {
- 1758|      0|                *output_pointer++ = '\t';
- 1759|      0|            }
- 1760|      0|            output_buffer->offset += output_buffer->depth;
- 1761|      0|        }
+ 1756|  37.6k|            for (i = 0; i < output_buffer->depth; i++)
+ 1757|  28.0k|            {
+ 1758|  28.0k|                *output_pointer++ = '\t';
+ 1759|  28.0k|            }
+ 1760|  9.57k|            output_buffer->offset += output_buffer->depth;
+ 1761|  9.57k|        }
  1762|       |
  1763|       |        /* print key */
- 1764|      0|        if (!print_string_ptr((unsigned char*)current_item->string, output_buffer))
+ 1764|  10.8k|        if (!print_string_ptr((unsigned char*)current_item->string, output_buffer))
  1765|      0|        {
  1766|      0|            return false;
  1767|      0|        }
- 1768|      0|        update_offset(output_buffer);
+ 1768|  10.8k|        update_offset(output_buffer);
  1769|       |
- 1770|      0|        length = (size_t) (output_buffer->format ? 2 : 1);
- 1771|      0|        output_pointer = ensure(output_buffer, length);
- 1772|      0|        if (output_pointer == NULL)
+ 1770|  10.8k|        length = (size_t) (output_buffer->format ? 2 : 1);
+ 1771|  10.8k|        output_pointer = ensure(output_buffer, length);
+ 1772|  10.8k|        if (output_pointer == NULL)
  1773|      0|        {
  1774|      0|            return false;
  1775|      0|        }
- 1776|      0|        *output_pointer++ = ':';
- 1777|      0|        if (output_buffer->format)
- 1778|      0|        {
- 1779|      0|            *output_pointer++ = '\t';
- 1780|      0|        }
- 1781|      0|        output_buffer->offset += length;
+ 1776|  10.8k|        *output_pointer++ = ':';
+ 1777|  10.8k|        if (output_buffer->format)
+ 1778|  9.57k|        {
+ 1779|  9.57k|            *output_pointer++ = '\t';
+ 1780|  9.57k|        }
+ 1781|  10.8k|        output_buffer->offset += length;
  1782|       |
  1783|       |        /* print value */
- 1784|      0|        if (!print_value(current_item, output_buffer))
+ 1784|  10.8k|        if (!print_value(current_item, output_buffer))
  1785|      0|        {
  1786|      0|            return false;
  1787|      0|        }
- 1788|      0|        update_offset(output_buffer);
+ 1788|  10.8k|        update_offset(output_buffer);
  1789|       |
  1790|       |        /* print comma if not last */
- 1791|      0|        length = ((size_t)(output_buffer->format ? 1 : 0) + (size_t)(current_item->next ? 1 : 0));
- 1792|      0|        output_pointer = ensure(output_buffer, length + 1);
- 1793|      0|        if (output_pointer == NULL)
+ 1791|  10.8k|        length = ((size_t)(output_buffer->format ? 1 : 0) + (size_t)(current_item->next ? 1 : 0));
+ 1792|  10.8k|        output_pointer = ensure(output_buffer, length + 1);
+ 1793|  10.8k|        if (output_pointer == NULL)
  1794|      0|        {
  1795|      0|            return false;
  1796|      0|        }
- 1797|      0|        if (current_item->next)
- 1798|      0|        {
- 1799|      0|            *output_pointer++ = ',';
- 1800|      0|        }
+ 1797|  10.8k|        if (current_item->next)
+ 1798|  7.78k|        {
+ 1799|  7.78k|            *output_pointer++ = ',';
+ 1800|  7.78k|        }
  1801|       |
- 1802|      0|        if (output_buffer->format)
- 1803|      0|        {
- 1804|      0|            *output_pointer++ = '\n';
- 1805|      0|        }
- 1806|      0|        *output_pointer = '\0';
- 1807|      0|        output_buffer->offset += length;
+ 1802|  10.8k|        if (output_buffer->format)
+ 1803|  9.57k|        {
+ 1804|  9.57k|            *output_pointer++ = '\n';
+ 1805|  9.57k|        }
+ 1806|  10.8k|        *output_pointer = '\0';
+ 1807|  10.8k|        output_buffer->offset += length;
  1808|       |
- 1809|      0|        current_item = current_item->next;
- 1810|      0|    }
+ 1809|  10.8k|        current_item = current_item->next;
+ 1810|  10.8k|    }
  1811|       |
- 1812|      0|    output_pointer = ensure(output_buffer, output_buffer->format ? (output_buffer->depth + 1) : 2);
- 1813|      0|    if (output_pointer == NULL)
+ 1812|  3.15k|    output_pointer = ensure(output_buffer, output_buffer->format ? (output_buffer->depth + 1) : 2);
+ 1813|  3.15k|    if (output_pointer == NULL)
  1814|      0|    {
  1815|      0|        return false;
  1816|      0|    }
- 1817|      0|    if (output_buffer->format)
- 1818|      0|    {
- 1819|      0|        size_t i;
- 1820|      0|        for (i = 0; i < (output_buffer->depth - 1); i++)
- 1821|      0|        {
- 1822|      0|            *output_pointer++ = '\t';
- 1823|      0|        }
- 1824|      0|    }
- 1825|      0|    *output_pointer++ = '}';
- 1826|      0|    *output_pointer = '\0';
- 1827|      0|    output_buffer->depth--;
+ 1817|  3.15k|    if (output_buffer->format)
+ 1818|  2.74k|    {
+ 1819|  2.74k|        size_t i;
+ 1820|  8.36k|        for (i = 0; i < (output_buffer->depth - 1); i++)
+ 1821|  5.62k|        {
+ 1822|  5.62k|            *output_pointer++ = '\t';
+ 1823|  5.62k|        }
+ 1824|  2.74k|    }
+ 1825|  3.15k|    *output_pointer++ = '}';
+ 1826|  3.15k|    *output_pointer = '\0';
+ 1827|  3.15k|    output_buffer->depth--;
  1828|       |
- 1829|      0|    return true;
- 1830|      0|}
+ 1829|  3.15k|    return true;
+ 1830|  3.15k|}
  1831|       |
  1832|       |/* Get Array size/item / object item. */
  1833|       |CJSON_PUBLIC(int) cJSON_GetArraySize(const cJSON *array)
@@ -3219,17 +3219,17 @@
    87|       |
    88|       |/* cJSON Types: */
    89|      0|#define cJSON_Invalid (0)
-   90|    549|#define cJSON_False  (1 << 0)
-   91|     95|#define cJSON_True   (1 << 1)
-   92|    177|#define cJSON_NULL   (1 << 2)
-   93|  8.30k|#define cJSON_Number (1 << 3)
-   94|  24.3k|#define cJSON_String (1 << 4)
-   95|  8.43k|#define cJSON_Array  (1 << 5)
-   96|  2.08k|#define cJSON_Object (1 << 6)
+   90|    877|#define cJSON_False  (1 << 0)
+   91|    266|#define cJSON_True   (1 << 1)
+   92|    600|#define cJSON_NULL   (1 << 2)
+   93|  15.3k|#define cJSON_Number (1 << 3)
+   94|  34.9k|#define cJSON_String (1 << 4)
+   95|  12.1k|#define cJSON_Array  (1 << 5)
+   96|  7.11k|#define cJSON_Object (1 << 6)
    97|      0|#define cJSON_Raw    (1 << 7) /* raw json */
    98|       |
-   99|  85.7k|#define cJSON_IsReference 256
-  100|  42.8k|#define cJSON_StringIsConst 512
+   99|  81.8k|#define cJSON_IsReference 256
+  100|  40.9k|#define cJSON_StringIsConst 512
   101|       |
   102|       |/* The cJSON structure: */
   103|       |typedef struct cJSON
@@ -3266,7 +3266,7 @@
   134|       |/* Limits how deeply nested arrays/objects can be before cJSON rejects to parse them.
   135|       | * This is to prevent stack overflows. */
   136|       |#ifndef CJSON_NESTING_LIMIT
-  137|  19.8k|#define CJSON_NESTING_LIMIT 1000
+  137|  17.6k|#define CJSON_NESTING_LIMIT 1000
   138|       |#endif
   139|       |
   140|       |/* returns the version of cJSON as a string */
@@ -3461,70 +3461,70 @@
    27|       |#include "../cJSON.h"
    28|       |
    29|       |static char *read_file(const char *filename)
-   30|  1.80k|{
-   31|  1.80k|    FILE *file = NULL;
-   32|  1.80k|    long length = 0;
-   33|  1.80k|    char *content = NULL;
-   34|  1.80k|    size_t read_chars = 0;
+   30|  2.12k|{
+   31|  2.12k|    FILE *file = NULL;
+   32|  2.12k|    long length = 0;
+   33|  2.12k|    char *content = NULL;
+   34|  2.12k|    size_t read_chars = 0;
    35|       |
    36|       |    /* open in read binary mode */
-   37|  1.80k|    file = fopen(filename, "rb");
-   38|  1.80k|    if (file == NULL)
+   37|  2.12k|    file = fopen(filename, "rb");
+   38|  2.12k|    if (file == NULL)
    39|      0|    {
    40|      0|        goto cleanup;
    41|      0|    }
    42|       |
    43|       |    /* get the length */
-   44|  1.80k|    if (fseek(file, 0, SEEK_END) != 0)
+   44|  2.12k|    if (fseek(file, 0, SEEK_END) != 0)
    45|      0|    {
    46|      0|        goto cleanup;
    47|      0|    }
-   48|  1.80k|    length = ftell(file);
-   49|  1.80k|    if (length < 0)
+   48|  2.12k|    length = ftell(file);
+   49|  2.12k|    if (length < 0)
    50|      0|    {
    51|      0|        goto cleanup;
    52|      0|    }
-   53|  1.80k|    if (fseek(file, 0, SEEK_SET) != 0)
+   53|  2.12k|    if (fseek(file, 0, SEEK_SET) != 0)
    54|      0|    {
    55|      0|        goto cleanup;
    56|      0|    }
    57|       |
    58|       |    /* allocate content buffer */
-   59|  1.80k|    content = (char*)malloc((size_t)length + sizeof(""));
-   60|  1.80k|    if (content == NULL)
+   59|  2.12k|    content = (char*)malloc((size_t)length + sizeof(""));
+   60|  2.12k|    if (content == NULL)
    61|      0|    {
    62|      0|        goto cleanup;
    63|      0|    }
    64|       |
    65|       |    /* read the file into memory */
-   66|  1.80k|    read_chars = fread(content, sizeof(char), (size_t)length, file);
-   67|  1.80k|    if ((long)read_chars != length)
+   66|  2.12k|    read_chars = fread(content, sizeof(char), (size_t)length, file);
+   67|  2.12k|    if ((long)read_chars != length)
    68|      0|    {
    69|      0|        free(content);
    70|      0|        content = NULL;
    71|      0|        goto cleanup;
    72|      0|    }
-   73|  1.80k|    content[read_chars] = '\0';
+   73|  2.12k|    content[read_chars] = '\0';
    74|       |
    75|       |
-   76|  1.80k|cleanup:
-   77|  1.80k|    if (file != NULL)
-   78|  1.80k|    {
-   79|  1.80k|        fclose(file);
-   80|  1.80k|    }
+   76|  2.12k|cleanup:
+   77|  2.12k|    if (file != NULL)
+   78|  2.12k|    {
+   79|  2.12k|        fclose(file);
+   80|  2.12k|    }
    81|       |
-   82|  1.80k|    return content;
-   83|  1.80k|}
+   82|  2.12k|    return content;
+   83|  2.12k|}
    84|       |
    85|       |int main(int argc, char** argv)
-   86|  1.80k|{
-   87|  1.80k|    const char *filename = NULL;
-   88|  1.80k|    cJSON *item = NULL;
-   89|  1.80k|    char *json = NULL;
-   90|  1.80k|    int status = EXIT_FAILURE;
-   91|  1.80k|    char *printed_json = NULL;
+   86|  2.12k|{
+   87|  2.12k|    const char *filename = NULL;
+   88|  2.12k|    cJSON *item = NULL;
+   89|  2.12k|    char *json = NULL;
+   90|  2.12k|    int status = EXIT_FAILURE;
+   91|  2.12k|    char *printed_json = NULL;
    92|       |
-   93|  1.80k|    if ((argc < 2) || (argc > 3))
+   93|  2.12k|    if ((argc < 2) || (argc > 3))
    94|      0|    {
    95|      0|        printf("Usage:\n");
    96|      0|        printf("%s input_file [enable_printing]\n", argv[0]);
@@ -3533,79 +3533,81 @@
    99|      0|        goto cleanup;
   100|      0|    }
   101|       |
-  102|  1.80k|    filename = argv[1];
+  102|  2.12k|    filename = argv[1];
   103|       |
   104|       |#if __AFL_HAVE_MANUAL_CONTROL
   105|       |    while (__AFL_LOOP(1000))
   106|       |    {
   107|       |#endif
-  108|  1.80k|    status = EXIT_SUCCESS;
+  108|  2.12k|    status = EXIT_SUCCESS;
   109|       |
-  110|  1.80k|    json = read_file(filename);
-  111|  1.80k|    if ((json == NULL) || (json[0] == '\0') || (json[1] == '\0'))
+  110|  2.12k|    json = read_file(filename);
+  111|  2.12k|    if ((json == NULL) || (json[0] == '\0') || (json[1] == '\0'))
   112|     10|    {
   113|     10|        status = EXIT_FAILURE;
   114|     10|        goto cleanup;
   115|     10|    }
-  116|  1.79k|    item = cJSON_Parse(json + 2);
-  117|  1.79k|    if (item == NULL)
-  118|  1.07k|    {
-  119|  1.07k|        goto cleanup;
-  120|  1.07k|    }
-  121|       |
-  122|    721|    if ((argc == 3) && (strncmp(argv[2], "yes", 3) == 0))
-  123|      0|    {
-  124|      0|        int do_format = 0;
-  125|      0|        if (json[1] == 'f')
-  126|      0|        {
-  127|      0|            do_format = 1;
-  128|      0|        }
-  129|       |
-  130|      0|        if (json[0] == 'b')
-  131|      0|        {
-  132|       |            /* buffered printing */
-  133|      0|            printed_json = cJSON_PrintBuffered(item, 1, do_format);
-  134|      0|        }
-  135|      0|        else
-  136|      0|        {
-  137|       |            /* unbuffered printing */
-  138|      0|            if (do_format)
-  139|      0|            {
-  140|      0|                printed_json = cJSON_Print(item);
-  141|      0|            }
-  142|      0|            else
-  143|      0|            {
-  144|      0|                printed_json = cJSON_PrintUnformatted(item);
-  145|      0|            }
-  146|      0|        }
-  147|      0|        if (printed_json == NULL)
-  148|      0|        {
-  149|      0|            status = EXIT_FAILURE;
-  150|      0|            goto cleanup;
-  151|      0|        }
-  152|      0|        printf("%s\n", printed_json);
-  153|      0|    }
-  154|       |
-  155|  1.80k|cleanup:
-  156|  1.80k|    if (item != NULL)
-  157|    721|    {
-  158|    721|        cJSON_Delete(item);
-  159|    721|        item = NULL;
-  160|    721|    }
-  161|  1.80k|    if (json != NULL)
-  162|  1.80k|    {
-  163|  1.80k|        free(json);
-  164|  1.80k|        json = NULL;
-  165|  1.80k|    }
-  166|  1.80k|    if (printed_json != NULL)
-  167|      0|    {
-  168|      0|        free(printed_json);
-  169|      0|        printed_json = NULL;
-  170|      0|    }
-  171|       |#if __AFL_HAVE_MANUAL_CONTROL
-  172|       |    }
-  173|       |#endif
-  174|       |//	printf("afl testing done");
-  175|  1.80k|    return status;
-  176|    721|}
+  116|  2.11k|    item = cJSON_Parse(json + 2);
+  117|  2.11k|    if (item == NULL)
+  118|  1.06k|    {
+  119|  1.06k|        goto cleanup;
+  120|  1.06k|    }
+  121|  1.05k|   char yes[5] = "yes";
+  122|  1.05k|   argv[2] = yes;
+  123|  1.05k|   argc=3;
+  124|  1.05k|    if ((argc == 3) && (strncmp(argv[2], "yes", 3) == 0))
+  125|  1.05k|    {
+  126|  1.05k|        int do_format = 0;
+  127|  1.05k|        if (json[1] == 'f')
+  128|    651|        {
+  129|    651|            do_format = 1;
+  130|    651|        }
+  131|       |
+  132|  1.05k|        if (json[0] == 'b')
+  133|    797|        {
+  134|       |            /* buffered printing */
+  135|    797|            printed_json = cJSON_PrintBuffered(item, 1, do_format);
+  136|    797|        }
+  137|    260|        else
+  138|    260|        {
+  139|       |            /* unbuffered printing */
+  140|    260|            if (do_format)
+  141|     49|            {
+  142|     49|                printed_json = cJSON_Print(item);
+  143|     49|            }
+  144|    211|            else
+  145|    211|            {
+  146|    211|                printed_json = cJSON_PrintUnformatted(item);
+  147|    211|            }
+  148|    260|        }
+  149|  1.05k|        if (printed_json == NULL)
+  150|      0|        {
+  151|      0|            status = EXIT_FAILURE;
+  152|      0|            goto cleanup;
+  153|      0|        }
+  154|  1.05k|        printf("%s\n", printed_json);
+  155|  1.05k|    }
+  156|       |
+  157|  2.12k|cleanup:
+  158|  2.12k|    if (item != NULL)
+  159|  1.05k|    {
+  160|  1.05k|        cJSON_Delete(item);
+  161|  1.05k|        item = NULL;
+  162|  1.05k|    }
+  163|  2.12k|    if (json != NULL)
+  164|  2.12k|    {
+  165|  2.12k|        free(json);
+  166|  2.12k|        json = NULL;
+  167|  2.12k|    }
+  168|  2.12k|    if (printed_json != NULL)
+  169|  1.05k|    {
+  170|  1.05k|        free(printed_json);
+  171|  1.05k|        printed_json = NULL;
+  172|  1.05k|    }
+  173|       |#if __AFL_HAVE_MANUAL_CONTROL
+  174|       |    }
+  175|       |#endif
+  176|       |//	printf("afl testing done");
+  177|  2.12k|    return status;
+  178|  1.05k|}
 

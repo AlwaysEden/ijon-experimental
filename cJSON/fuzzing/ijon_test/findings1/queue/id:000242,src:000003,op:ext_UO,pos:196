@@ -1,9 +1,0 @@
-bf{"menu": {
-  "id": "file",
-  "e": "File",
-  "p": { "meem": [
-  {"v": "New", "ock": "Cr"},
-  {"e": "Open", "onc": ")"},   {"value": "Close", "ock":{"1":1,"2":2}}
-    ]
-  }
-}}
