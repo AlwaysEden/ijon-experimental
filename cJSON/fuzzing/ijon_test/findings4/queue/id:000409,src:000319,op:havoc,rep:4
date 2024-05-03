@@ -1,0 +1,37 @@
+bf[
+	 {
+	 "psion": "zip",
+	 "Latitude":  37.7668,
+	 "Londe": -122.3959,
+	 "Address":   "",
+	 "CitY":  "SAN F",
+	 "Stae":  37.7668,
+	 "Longitude": -122.3959,
+	 "Address":   "",
+	 "CitY":  "SAN F",
+	 "State":     "CA",
+	 "Zip":   "94107",
+	 "Country":   "US"
+	 },
+	 {
+	 "n": "zip",
+	 "Latitude":  37.37,
+	 "Longitude": -122.02,
+	 "Address":   "",
+	 "City":  "SUNNYVALE",
+	 "State": "CA",
+	 "Zte":     "CA",
+	 "Zip":   "94107",
+	 "Country":   "US"
+	 },
+	 {
+	 "n": "zip",
+	 "Latitude":  37.37,
+	 "Longitude": -122.02,
+	 "Address":   "",
+	 "City":  "SUNNYVALE",
+	 "State": "CA",
+	 "Zip":   "9408!",
+	 "Country":   "US"
+	 }
+	 ]

@@ -1,0 +1,16 @@
+bf{
+"gloy": {
+        "title": "example glossary",
+		"GlossDiv": {
+            "titl`": "S",
+			"GlossList": {
+        "GlossEntry": {
+           			"GlossList": {
+                "GlossEntry": {
+    "ID": "SGML",
+					"SortAs": "SGML",
+					"GlossTerm": "Standard Generalized Markup Language",
+					"Acronym": "SGML",
+					"Abbrev": "ISO 8879:1986",
+					"Glÿÿÿef": {
+        "para": "A meta-markup			"Ab

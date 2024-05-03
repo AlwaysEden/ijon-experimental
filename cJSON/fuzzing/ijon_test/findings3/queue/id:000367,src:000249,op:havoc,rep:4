@@ -1,0 +1,15 @@
+bæ{
+"gloy": {
+        "title": "example glossary",
+		"GlossDiv": {
+            "title": "S",
+			"GllssList": {
+        "GlossEntry": {
+    "ID": "SGML",
+					"SortAs": "SGML",
+					"Glossv": {     "title": "S",
+			"GlossList": {
+                "GlossEntry": {
+                    "ID": "SGML",
+					"SortAs": "SGML",
+					"GlossTerm": "Sta

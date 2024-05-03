@@ -9,15 +9,26 @@ cd fuzzing
 
 make
 
-a=0
-while [ "$a" -lt 5 ]
-do
-	/mnt/hdd/fuzz_usability/ijon-experimental/afl-fuzz -i /mnt/hdd/fuzz_usability/ijon-experimental/cJSON/fuzzing/inputs -o findings$a ./afl-main @@ yes &
-	program_pid=$!
+/mnt/hdd/fuzz_usability/ijon-experimental/afl-fuzz -i /mnt/hdd/fuzz_usability/ijon-experimental/cJSON/fuzzing/inputs -o ../../ijon_test/findings0 ./afl-main @@ yes &
+program_pid0=$!
 
-	sleep 3600 
+/mnt/hdd/fuzz_usability/ijon-experimental/afl-fuzz -i /mnt/hdd/fuzz_usability/ijon-experimental/cJSON/fuzzing/inputs -o ../../ijon_test/findings1 ./afl-main @@ yes &
+program_pid1=$!
+
+/mnt/hdd/fuzz_usability/ijon-experimental/afl-fuzz -i /mnt/hdd/fuzz_usability/ijon-experimental/cJSON/fuzzing/inputs -o ../../ijon_test/findings2 ./afl-main @@ yes &
+program_pid2=$!
+
+/mnt/hdd/fuzz_usability/ijon-experimental/afl-fuzz -i /mnt/hdd/fuzz_usability/ijon-experimental/cJSON/fuzzing/inputs -o ../../ijon_test/findings3 ./afl-main @@ yes &
+program_pid3=$!
+
+/mnt/hdd/fuzz_usability/ijon-experimental/afl-fuzz -i /mnt/hdd/fuzz_usability/ijon-experimental/cJSON/fuzzing/inputs -o ../../ijon_test/findings4 ./afl-main @@ yes &
+program_pid4=$!
+
+sleep 3700
+
+kill -9 $program_pid0
+kill -9 $program_pid1
+kill -9 $program_pid2
+kill -9 $program_pid3
+kill -9 $program_pid4
 	
-	kill -9 $program_pid
-	
-	((a++))
-done

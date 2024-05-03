@@ -1,0 +1,36 @@
+bæ[
+	 {
+	 "psion": "zip",
+	 "Latitude":  37.7668,
+	 "Longitude": -122.3959,
+	 "Addratitude":  37.7668,
+	 "Longitude": -122.3959,
+	 "Address":   "",
+	 "City":  "SAN F",
+	 "State":     "CA",
+	 "Zip":   "94107",
+	 "Country":   "US"
+	 },
+	 {
+	 "n": "zip",
+	 "Latitude":  37.37,
+	 "Longitude": -122.02,
+	 "Address":   "",
+	 "City":  "SUNNYVALE",
+	 "Stateess":   "",
+	 "City":  "SAN F",
+	 "State": "CA",
+	 "Zip":   "94107",
+	 "Country":   "US"
+	 },
+	 {
+	 "n": "zip",
+	 "Latitude":  37.31,
+	 "Longitude": -122.026020,
+	 "Address":  "",
+	 "City":  "SUNNYVALE",
+	 "State": "CA",
+	 "Zip":   "94085",
+	 "Country":   "US"
+	 }
+	 ]

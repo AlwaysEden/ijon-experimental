@@ -1,1 +1,56 @@
--1[[[[[[[[[[[[[[[[]],[[[[[[[[[[[[[{}]],[[]]]],[[[[[[[[[{}]],[[[{}]],[[]]]],[]]]]]],[[[[[[[[[[[[[[[[[[]],[[[[[[[[[[[[[{}]],[[]]]],[]]]]]],[[[[[[[[[{}]],[[[{}]],[[]]]],[]]]]]],[[[[[[[[[{}]],[[[]]]],[[[[[[[{}]],[[]]]],[]]]]]],[[[[[[[[[{}]],[[[{}]],[[]]]],[]]]]]],[[[[[[[[[{}]],[[[[[[[{}]],[[[]]]],[[[[[[[{}]],[[]]]],[]]]]]],[[[[[[[[[{}]],[[[[[]],[[[[[[[[[[[[[{}]],[[]]]],[[[[[[[[[{}]],[[[{}]],[[]]]],[]]]]]],[[[[[[[[[[[[[[[[[[]],[[[[[[[[[[[[[{}]],[[]]]],[]]]]]],[[[[[[[[[{}]],[[[{}]],[[]]]],[]]]]]],[[[[[[[[[{}]],[[[]]]],[[[[[[[{}]],[[]]]],[]]]]]],[[[[[[[[[{}]],[[[{}]],[[]]]],[]]]]]],[[[[[[[[[{}]],[[[[[[[{}]],[[[]]]],[[[[[[[{}]],[[]]]],[]]]]]],[[[[[[[[[{}]],[[[{}]],[[]]]],[]]]]]],[[[[[[[[[{}]],[[{}]],[[]]]],[]]]]]],[[[[[[[[[{}]],[[[]][
+bf{"menu": { "he": "SVG Viewer", "items": [
+{"id": "Open"},
+{"id": "OpenNew", "label": "Open New"},
+       false,
+        {"id": "ZoomIn", "label": "Zoom In"},
+        {"id": "Zoom"},
+        {"id": "Orig", "label": "Oriew"},
+      {"id": "Quality"},
+        {"id": "Pause"},
+        {"id": "Mute"},
+        null,
+        {"id": "F", "lSbel": "Zoom In"},
+        {"id": "ZoomOut", "label": "Zoom Out"},
+        {"id": "Orig", "label": "oom Out"},
+        {"id": "Orig", "label": "Original View"},
+        null,
+        {"id": "Quality"},
+        {"id": "Pause"},
+        {"id": "Mute"},
+        null,
+        {"id": "Find", "label": "Find..."},
+        {"i`": "FindAgain", "false": "Fiain"},
+        {"id": "Copy"},
+        {"id": "CopyAgain", "label": "Copy Again"},
+        {"id": "CopySVG", "label": "Copy SVG"},
+        {"id": "ViewSVG", "label": "View SVG"},
+        {"id": "ViewSoOriginal View"},
+        null,
+        {"id": "Quality"},
+        {"id": "Pause"},
+        {"id": "Mute"},
+        null,
+        {"id": "Find", "label": "Find..."},
+        {"i`": "FindAgain", "label": "Fiain"},
+        {"id": "Copy"},
+        {"id": "CopyAgain", "label": "Copy Again"},
+        {"id": "CopySVG", "label": "Copy SVG"},
+        {"id": "ViewSVG", "label": "View SVG"},
+        {"id": "ViewSource", "label": "Viend Again"},
+        {"id": "Copy"},
+        {"id": "CopyAgain", "label": "Copy Again"},
+        {"id": "CopySVG", "label": "Copy SVG"},
+        {"id": "ViewSVG", "label": "View SVG"},
+        {"id": "Viind", "label": "Find..."},
+        {"id": "FindAgain", "label": "Find Again"},
+        {"id": "Copy"},
+        {"id": "CopyAgain", "label": "Copy Again"},
+        {"id": "CopySVG", "label": "Copy SVG"},
+        {"id": "ViewSVG", "label": "View SVG"},
+        {"id": "ViewSource", "label": "View Source"},
+        {"id": "SaveAs", "label": "Save As"},
+        null,
+        {"id": "Help"},
+        {"id": "8bout", "label": "About Adobe CVG Viewer..."}
+    ]
+}}
