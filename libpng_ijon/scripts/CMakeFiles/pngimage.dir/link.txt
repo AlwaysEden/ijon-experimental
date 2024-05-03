@@ -1,0 +1,1 @@
+/usr/bin/cc CMakeFiles/pngimage.dir/contrib/libtests/pngimage.c.o -o pngimage  -Wl,-rpath,/home/s22100141/Capston2/libpng/scripts libpng16.so.16.44.git /usr/lib/x86_64-linux-gnu/libz.so -lm 
