@@ -1,0 +1,6 @@
+bf{"web-app": {
+  "servlet": [
+    {
+      "servlet-name": "cofaxCDS",
+      "servlet-class": "org.cofax.cds.CDSServlet",
+      "init-param": {Šalla

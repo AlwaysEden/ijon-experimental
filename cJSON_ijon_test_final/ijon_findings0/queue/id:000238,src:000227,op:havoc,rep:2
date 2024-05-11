@@ -1,0 +1,60 @@
+bf[
+	 {
+	 "precision": "zip",
+	 "Latitude":  37E7668,
+	 "Longitude":2E3959,
+	 "Address":   "",
+	 "City":  "SAN FRANCISCO",
+	 "State":     "CA",
+	 "Zip":   "94107",
+	 "Country":   "US"
+	 },
+	 {
+	 "precision": "zip",
+	 "Latitude":  37E371991,
+"Latitude":  37E7668,
+	 "Longitude":2E3959,
+	 "Address":   "",
+	 "City":  "SAN FRANCISCO",
+	 "State":     "CA",
+	 "Zip":   "94107",
+	 "try":   "US"
+	 },
+	 {
+	 "precision": "zip",
+	 "Latitude":  37E371991,
+	 "Longitude": -122E026020,
+	 "Address":   "",
+	 	 "Longiude":  37E7668,
+	 "Longitude":2E3959,
+	 "Address":   "",
+	 "City":  "CA",
+	 "Zip":   "94107",
+	 "Country":   "US"
+	 },
+	 {
+	 "precision": "zip",
+	 "Latitude":  37E371991,
+"Latitude":  37E7668,
+	 "Longitude":2E3959,
+	 "Address":   "",
+	 "City":  "SAN FRANCISCO",
+	 "State":     "CA",
+	 "Zip":   "94107",
+	 "Country":   "US"
+	 },
+	 {
+	 "precision": "zip",
+	 "Latitude":  37E371991,
+	 "Longitude": -122E026020,
+	 "Address":   "",
+	 	 "Longitude": -122E026020,
+	 "Address":   "",
+	 "Ctude": -122E026020,
+	 "Address":   "",
+	 "City":      "SUNNYVALE",
+	 "State":     "CA",
+	 "Zip":   "94085",
+	 "Country":   "US"
+	 }
+	 ] [

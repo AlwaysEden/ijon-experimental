@@ -1,0 +1,26 @@
+bf{"": { "he":        false,
+    "items": [
+             false,
+        {"id": "OpenNew", "label": ""},
+       false,
+        {"id": "ZoomIn", "label": "Zoom In"},
+        {"id": "ZoomOut", "label": ""},
+        {"id": "View", "label": "Oriew"},
+       false,
+        {"id": "Quality"},
+        {"id": "Pause"},
+        {"id": "Mute"},
+        null,
+        {"id": "Find", "label": "Find..."},
+        {"id": "FindAgain", "label": "Find Again"},
+        {"id": "Copy"},
+        {"id": "CopyAgain", "label": "in"},
+        {"id": "CopySVG", "label": "Copy SVG"},
+        {"id": "ViewSVG", "label": "View SVG"},
+        {"id": "ViewSource", "label": "View Source"},
+        {"id": "SaveAs", "label": "Save As"},
+        null,
+        {"id": "Help"},
+        {"id": "About", "label": "About Adobe CVG Viewer..."}
+    ]
+}}

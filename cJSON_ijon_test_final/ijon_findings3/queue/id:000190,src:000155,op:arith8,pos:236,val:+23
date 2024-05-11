@@ -1,0 +1,22 @@
+bf[
+	 {
+	 "precision": "zip",
+	 "Latitude":  37E7668,
+	 "Longitude":2E3959,
+	 "Address":   "",
+	 "City":  "SAN FRANCISCO",
+	 "State":     "CA",
+	 "Zip":   "94107",
+	 "Country":   "US"
+	 },
+	 {
+	 "precision": "zip",
+	 "Latitude":  37E371991,
+	 "Longitude": -122.026020,
+	 "Address":   "",
+	 "City":      "SUNNYVALE",
+	 "State":     "CA",
+	 "Zip":   "94085",
+	 "Country":   "US"
+	 }
+	 ]
