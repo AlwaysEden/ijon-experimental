@@ -1,0 +1,83 @@
+bf[
+	 {
+	 "precision": "zip",
+	 "Latitude":   37.7668,
+	 "Longitngitude": -122.3959,
+	 "Address":   "",
+	 "City":  "SAN FRANCISCO",
+	 "State":     "CA",
+	 "Zip":   "94107",
+	 "Country":   "US"
+	 },
+	 {
+	 "precision": "zip",
+	 "Latitude":  37.371991,
+	 "Longitude":2.02,
+	 "Address":   "",
+	 "City":  "SUNNYVALE",
+	 "State":  37.7668,
+	 "Longitude": -122.3959,
+	 "Address":   "",
+	 "City":  "SISCO",
+	 "State":     "CA",
+	 "Zip":   "94107",
+	 "Country":   "US"
+	 },
+	 {
+	 "precision": "zip",
+	 "Latitude":  37.371991,
+	 "Longitude": -122.026020,
+	 "Address":   "",
+	 "Cude": -122.3959,
+	 "Address":   "",
+	 "City":  "SAN FRANCISCO",
+	 "State":     "CA",
+	 "Zip":   "94107",
+	 "Country":   "US"
+	 },
+	 {
+	 "precision": "zip",
+	 "Latitude":  37.371991,
+	 "Longitude": -122.026020,
+	 "Address":   "",
+	 "City":  "SUNNYVALE",
+	 "State":  37.7668,
+	 "Longitude": -122.3959,
+	 "Address":   "",
+	 "City":  "SIS"
+	 },
+	 {
+	 "precision": "zip",
+	 "Latitude":  37.371991,
+	 "Longitude":2.026020,
+	 "Address":   "",
+	 "City":  "SUNNYVALE",
+	 "State":  37.7668,
+	 "s":   "",
+	 "City":  "SISCO",
+	 "State": "CA",
+	 "Zip":   "94107",
+	 "Country":   "US"
+	 },
+	 {
+	 "precision": "zip",
+	 "Lat": -122.026020,
+	 "Address":   "",
+	 "Cude": -122.3959,
+	 "Address":   "",
+	 "City":  "SAN FRANSCO",
+	 "State": "CA",
+	 "Zip":   "94107",
+	 "Country":   "US"
+	 },
+	 {
+	 "precision": "zip",
+	 "Latitude":  37.371991,
+	 "Longitude": -122.026020,
+	 "Address":   "",
+	 "City":  "SUNNYVALE",
+	 "State": "CA",
+	 "Zip":   "94 85",
+	 "Country":   "US"
+	 }
+	 ]

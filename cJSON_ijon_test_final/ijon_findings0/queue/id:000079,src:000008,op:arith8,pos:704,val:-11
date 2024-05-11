@@ -1,0 +1,12 @@
+bf{"web-app": {
+  "servlet": [
+    {   "servlet-name": "cofaxCDS",
+  "servlet-class": "oServlet",
+  "init-param": {
+"configGinstallationAt": "Philadelphia, PA", "configGlossary:adminEmail": "ksm@pobox.com",
+    "confedBy": "Cofax",
+"configGlossary:poweredByIcon": "/images/cofax.gif", "coticPath": "/contgTemplate",
+"templateLoaderClass": "org.ateLoader",
+"templatePath": "templates", "templateOverridePath": "",     "defaultListTemplate": "listTemplate.htm",
+"defaultFileTemplate": "articleTemplate.htm",
+        "useJSP": [als

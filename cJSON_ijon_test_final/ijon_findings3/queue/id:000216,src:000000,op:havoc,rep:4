@@ -1,0 +1,18 @@
+bf{
+"glossary": {
+        "title": "example glossary",
+		"GlossDiv": {
+            "title": "S",
+			"GlossList": {
+                "GlossEntry": {
+                    "IDst": {
+                "GlossEntry": {
+                    "ID": "SGML",
+					"SortAs": "SGML",
+					"GlossTerm": "Stae",
+					"Acronym": "SGML",
+					"Abbrev": "ISO 8879:1986",
+					"GlossDef": {
+                        "para":"nguage, used to create markup languages such as DocBook.",
+						"GlossSeeAlso": ["GML", "XML"]
+      % 
